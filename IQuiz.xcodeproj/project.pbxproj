@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0C2DFF9B1DCB03250026CD4E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2DFF9A1DCB03250026CD4E /* AppDelegate.swift */; };
-		0C2DFF9D1DCB03250026CD4E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2DFF9C1DCB03250026CD4E /* ViewController.swift */; };
 		0C2DFFA01DCB03250026CD4E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C2DFF9E1DCB03250026CD4E /* Main.storyboard */; };
 		0C2DFFA31DCB03250026CD4E /* IQuiz.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0C2DFFA11DCB03250026CD4E /* IQuiz.xcdatamodeld */; };
 		0C2DFFA51DCB03250026CD4E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C2DFFA41DCB03250026CD4E /* Assets.xcassets */; };
@@ -37,7 +36,6 @@
 /* Begin PBXFileReference section */
 		0C2DFF971DCB03250026CD4E /* IQuiz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IQuiz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C2DFF9A1DCB03250026CD4E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		0C2DFF9C1DCB03250026CD4E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		0C2DFF9F1DCB03250026CD4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0C2DFFA21DCB03250026CD4E /* IQuiz.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = IQuiz.xcdatamodel; sourceTree = "<group>"; };
 		0C2DFFA41DCB03250026CD4E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -100,7 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				0C2DFF9A1DCB03250026CD4E /* AppDelegate.swift */,
-				0C2DFF9C1DCB03250026CD4E /* ViewController.swift */,
 				0C2DFF9E1DCB03250026CD4E /* Main.storyboard */,
 				0C2DFFA41DCB03250026CD4E /* Assets.xcassets */,
 				0C2DFFA61DCB03250026CD4E /* LaunchScreen.storyboard */,
@@ -265,7 +262,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C2DFF9D1DCB03250026CD4E /* ViewController.swift in Sources */,
 				0C2DFFA31DCB03250026CD4E /* IQuiz.xcdatamodeld in Sources */,
 				0C2DFF9B1DCB03250026CD4E /* AppDelegate.swift in Sources */,
 			);
