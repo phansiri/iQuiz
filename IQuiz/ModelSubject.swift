@@ -12,4 +12,10 @@ class ModelSubject: NSObject {
     var imageFile: String!
     var subject: String!
     var descr: String!
+    /*
+    init(imageFile: String, subject: String, descr: String) {
+        self.imageFile = imageFile
+        self.subject = subject
+        self.descr = descr
+    }*/
 }

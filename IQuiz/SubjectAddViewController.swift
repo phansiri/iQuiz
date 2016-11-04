@@ -15,14 +15,27 @@ class SubjectAddViewController: UIViewController {
     @IBOutlet weak var addDescrTextField: UITextView!
     
     @IBAction func addSaveButton(_ sender: Any) {
+        /*
         let subject: ModelSubject = ModelSubject()
         subject.subject = addSubjectTextField.text
         subject.descr = addDescrTextField.text
         subject.imageFile = addImageTextField.text
+        */
+        let subject = ["subject": addSubjectTextField.text,
+                       "descr": addDescrTextField.text,
+                       "imageFile": addImageTextField.text]
+        // let delegate = UIApplication.shared.delegate as! AppDelegate
+        // delegate.subjects.append(subject)
         
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        delegate.subjects.append(subject)
+        let defaults = UserDefaults.standard
+        var saveSubjects = defaults.array(forKey: "saves")
+        if saveSubjects == nil {
+            saveSubjects = Array()
+        }
+        saveSubjects?.append(["data": subject])
         
+        defaults.set(saveSubjects, forKey: "saves")
+
         self.navigationController?.popViewController(animated: true)
     }
     override func viewDidLoad() {
