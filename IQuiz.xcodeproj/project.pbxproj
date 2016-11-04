@@ -17,6 +17,7 @@
 		0C2DFFCE1DCB04310026CD4E /* SubjectsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2DFFCD1DCB04310026CD4E /* SubjectsTableViewController.swift */; };
 		0C2DFFD21DCB04C70026CD4E /* SubjectsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2DFFD11DCB04C70026CD4E /* SubjectsTableViewCell.swift */; };
 		0C5344961DCBF3A100022A38 /* SubjectAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5344951DCBF3A100022A38 /* SubjectAddViewController.swift */; };
+		0C53450C1DCC44F800022A38 /* QuizTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C53450B1DCC44F800022A38 /* QuizTimeViewController.swift */; };
 		0CD3165F1DCBD9EE00EC3E9D /* ModelSubject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD3165E1DCBD9EE00EC3E9D /* ModelSubject.swift */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +55,7 @@
 		0C2DFFCD1DCB04310026CD4E /* SubjectsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectsTableViewController.swift; sourceTree = "<group>"; };
 		0C2DFFD11DCB04C70026CD4E /* SubjectsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectsTableViewCell.swift; sourceTree = "<group>"; };
 		0C5344951DCBF3A100022A38 /* SubjectAddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectAddViewController.swift; sourceTree = "<group>"; };
+		0C53450B1DCC44F800022A38 /* QuizTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizTimeViewController.swift; sourceTree = "<group>"; };
 		0CD3165E1DCBD9EE00EC3E9D /* ModelSubject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelSubject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -108,6 +110,7 @@
 				0C2DFF9A1DCB03250026CD4E /* AppDelegate.swift */,
 				0C2DFFCD1DCB04310026CD4E /* SubjectsTableViewController.swift */,
 				0C2DFFD11DCB04C70026CD4E /* SubjectsTableViewCell.swift */,
+				0C53450B1DCC44F800022A38 /* QuizTimeViewController.swift */,
 				0C2DFF9E1DCB03250026CD4E /* Main.storyboard */,
 				0C2DFFA41DCB03250026CD4E /* Assets.xcassets */,
 				0C2DFFA61DCB03250026CD4E /* LaunchScreen.storyboard */,
@@ -279,6 +282,7 @@
 				0CD3165F1DCBD9EE00EC3E9D /* ModelSubject.swift in Sources */,
 				0C2DFFA31DCB03250026CD4E /* IQuiz.xcdatamodeld in Sources */,
 				0C2DFFCE1DCB04310026CD4E /* SubjectsTableViewController.swift in Sources */,
+				0C53450C1DCC44F800022A38 /* QuizTimeViewController.swift in Sources */,
 				0C2DFF9B1DCB03250026CD4E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

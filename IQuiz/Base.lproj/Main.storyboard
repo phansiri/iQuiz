@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -70,10 +71,10 @@
             </objects>
             <point key="canvasLocation" x="1024.8" y="48.125937031484263"/>
         </scene>
-        <!--View Controller-->
+        <!--Quiz Time View Controller-->
         <scene sceneID="gKl-q0-TsP">
             <objects>
-                <viewController id="5oD-vC-J8z" sceneMemberID="viewController">
+                <viewController id="5oD-vC-J8z" customClass="QuizTimeViewController" customModule="IQuiz" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NWN-UY-ntm"/>
                         <viewControllerLayoutGuide type="bottom" id="e1d-Dh-ROc"/>
@@ -81,12 +82,31 @@
                     <view key="view" contentMode="scaleToFill" id="CzS-Ev-1tq">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subject" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="10K-DI-4qn">
+                                <rect key="frame" x="16" y="72" width="288" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="gj3-fv-vwr"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Georgia" family="Georgia" pointSize="35"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="10K-DI-4qn" firstAttribute="trailing" secondItem="CzS-Ev-1tq" secondAttribute="trailingMargin" id="6aY-xB-Okv"/>
+                            <constraint firstItem="10K-DI-4qn" firstAttribute="top" secondItem="NWN-UY-ntm" secondAttribute="bottom" constant="8" id="DfT-03-vzk"/>
+                            <constraint firstItem="10K-DI-4qn" firstAttribute="leading" secondItem="CzS-Ev-1tq" secondAttribute="leadingMargin" id="Fr0-H5-MV7"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="subjectLabel" destination="10K-DI-4qn" id="BSm-cn-zHf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zuq-nG-R46" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1731" y="45"/>
+            <point key="canvasLocation" x="1730.625" y="44.366197183098592"/>
         </scene>
         <!--Subject Add View Controller-->
         <scene sceneID="8Ps-2e-Suw">

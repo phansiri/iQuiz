@@ -36,7 +36,7 @@ class SubjectAddViewController: UIViewController {
         
         defaults.set(saveSubjects, forKey: "saves")
 
-        self.navigationController?.popViewController(animated: true)
+        //self.navigationController?.popViewController(animated: true)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
