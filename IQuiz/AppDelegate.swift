@@ -13,10 +13,30 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var subjects = [[String:[String:String]]]()
+    let math = [
+        "imageFile": "math icon",
+        "subject": "Mathematics",
+        "descr": "Its a hard subject"
+    ]
     
-    //var subjects = [ModelSubject]()
+    let hero = [
+        "imageFile": "hero icon",
+        "subject": "Marvel Super Heroes",
+        "descr": "Pow!"
+    ]
     
+    let science = [
+        "imageFile": "science icon",
+        "subject": "Science",
+        "descr": "Its a harder subject"
+    ]
+    
+    func addSubjects() {
+        subjects.append(["data": math])
+        subjects.append(["data": hero])
+        subjects.append(["data": science])
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
