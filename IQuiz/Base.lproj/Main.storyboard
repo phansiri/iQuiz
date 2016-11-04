@@ -59,11 +59,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="iQuiz Subjects" id="dGK-Cy-Mif">
-                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="KlG-ue-BOm">
-                            <connections>
-                                <segue destination="Txt-1r-QPC" kind="show" id="354-ev-u1l"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Settings" id="dSA-sd-SsA">
                             <connections>
                                 <action selector="settingsButton:" destination="0eq-Jo-71J" id="Dlz-sW-Z9q"/>

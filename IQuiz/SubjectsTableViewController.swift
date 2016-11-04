@@ -9,7 +9,7 @@
 import UIKit
 
 class SubjectsTableViewController: UITableViewController {
-    
+    /*
     private var subjects = SubjectsTableViewController.getSubjects()
     
     private static func getSubjects() -> [[String:[String:String]]] {
@@ -20,21 +20,18 @@ class SubjectsTableViewController: UITableViewController {
             return subjects as! [[String:[String:String]]]
         }
     }
+ */
     //private var subjects = [String:ModelSubject]()
     /*
     var math: ModelSubject = ModelSubject(imageFile: "math icon", subject: "Mathematics", descr: "its hard")
     var hero: ModelSubject = ModelSubject(imageFile: "hero icon", subject: "Marvel Super Heroes", descr: "Pow!")
     var science: ModelSubject = ModelSubject(imageFile: "science icon", subject: "Science", descr: "its harder than meth")
-
-
     
     private var math = [
         "image": "math icon",
         "subject": "Mathematics",
         "descr": "Its a hard subject"
     ]
-    
-    
     
     private var hero = [
         "image": "hero icon",
@@ -47,15 +44,18 @@ class SubjectsTableViewController: UITableViewController {
         "subject": "Science",
         "descr": "Its a harder subject"
     ]*/
+
     
     
-    //var dataSource = [ModelSubject]()
+    
+    
+    var subjects = [[String:[String:String]]]()
  
     @IBAction func settingsButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Settings", message: "Settings go here", preferredStyle: .alert)
-//        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        // let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let ok = UIAlertAction(title: "Ok", style: .default, handler: nil)
-//        alert.addAction(cancel)
+        // alert.addAction(cancel)
         alert.addAction(ok)
         self.present(alert, animated: true, completion: nil)
     }
@@ -71,8 +71,10 @@ class SubjectsTableViewController: UITableViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //let delegate = UIApplication.shared.delegate as! AppDelegate
-        //dataSource = delegate.subjects
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        delegate.subjects.removeAll()
+        delegate.addSubjects()
+        subjects = delegate.subjects
         tableView.reloadData()
     }
 
@@ -99,6 +101,7 @@ class SubjectsTableViewController: UITableViewController {
        let cell = tableView.dequeueReusableCell(withIdentifier: "iQuizCell", for: indexPath) as! SubjectsTableViewCell
         let subject = self.subjects[indexPath.row]
         let oneSubject = subject["data"]
+        //let oneSubject = subject
         cell.subjectLabel.text = oneSubject?["subject"]
         cell.descrLabel.text = oneSubject?["descr"]
         cell.imageLabel.image = UIImage(named: (oneSubject?["imageFile"])!)
@@ -123,7 +126,7 @@ class SubjectsTableViewController: UITableViewController {
     }
     */
 
-    
+    /*
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
@@ -139,7 +142,7 @@ class SubjectsTableViewController: UITableViewController {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    
+    */
 
     /*
     // Override to support rearranging the table view.
