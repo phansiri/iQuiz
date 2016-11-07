@@ -14,13 +14,12 @@ class QuizTimeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let data = subjects[subjectCounter]
 
-        loadData()
+        loadData(data: data)
         
-        
-        
-        
-        
+        loadQuestions(data: data)
 
         // Do any additional setup after loading the view.
     }
@@ -36,9 +35,13 @@ class QuizTimeViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func loadData() {
+    func loadData(data: [String:String]) {
         let data = subjects[subjectCounter]
         subjectLabel.text = data["subject"]
+    }
+    
+    func loadQuestions(data: [String:String]) {
+        
     }
     
 
