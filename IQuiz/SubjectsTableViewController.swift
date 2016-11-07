@@ -8,49 +8,11 @@
 
 import UIKit
 
-class SubjectsTableViewController: UITableViewController {
-    /*
-    private var subjects = SubjectsTableViewController.getSubjects()
-    
-    private static func getSubjects() -> [[String:[String:String]]] {
-        let subjects = UserDefaults.standard.array(forKey: "saves")
-        if subjects == nil {
-            return Array()
-        } else {
-            return subjects as! [[String:[String:String]]]
-        }
-    }
- */
-    //private var subjects = [String:ModelSubject]()
-    /*
-    var math: ModelSubject = ModelSubject(imageFile: "math icon", subject: "Mathematics", descr: "its hard")
-    var hero: ModelSubject = ModelSubject(imageFile: "hero icon", subject: "Marvel Super Heroes", descr: "Pow!")
-    var science: ModelSubject = ModelSubject(imageFile: "science icon", subject: "Science", descr: "its harder than meth")
-    
-    private var math = [
-        "image": "math icon",
-        "subject": "Mathematics",
-        "descr": "Its a hard subject"
-    ]
-    
-    private var hero = [
-        "image": "hero icon",
-        "subject": "Marvel Super Heroes",
-        "descr": "Pow!"
-    ]
-    
-    private var science = [
-        "image": "science icon",
-        "subject": "Science",
-        "descr": "Its a harder subject"
-    ]*/
+var subjects = [Dictionary<String,String>()]
+var subjectCounter: Int = 0
 
+class SubjectsTableViewController: UITableViewController {
     
-    
-    
-    
-    var subjects = [[String:[String:String]]]()
- 
     @IBAction func settingsButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Settings", message: "Settings go here", preferredStyle: .alert)
         // let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -59,63 +21,74 @@ class SubjectsTableViewController: UITableViewController {
         alert.addAction(ok)
         self.present(alert, animated: true, completion: nil)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.tableFooterView = UIView()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        delegate.subjects.removeAll()
-        delegate.addSubjects()
-        subjects = delegate.subjects
-        tableView.reloadData()
+        if subjects.count ==  1 {
+            subjects.removeAll()
+            subjects.append(["subject": "Mathemathics", "descr": "Hard subject", "imageFile": "math icon"])
+            subjects.append(["subject": "Science", "descr": "Harder subject", "imageFile": "science icon"])
+            subjects.append(["subject": "Marvel Super Heroes", "descr": "Pow!", "imageFile": "hero icon"])
+            
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        //return dataSource.count
-        return self.subjects.count
+        return subjects.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        let cell = tableView.dequeueReusableCell(withIdentifier: "iQuizCell", for: indexPath) as! SubjectsTableViewCell
-        let subject = self.subjects[indexPath.row]
-        let oneSubject = subject["data"]
-        //let oneSubject = subject
-        cell.subjectLabel.text = oneSubject?["subject"]
-        cell.descrLabel.text = oneSubject?["descr"]
-        cell.imageLabel.image = UIImage(named: (oneSubject?["imageFile"])!)
-        /*
-        let subject = dataSource[indexPath.row]
-        cell.subjectLabel.text = subject.subject
-        cell.descrLabel.text = subject.descr
-        let imageFile = subject.imageFile
-        cell.imageLabel.image = UIImage(named: imageFile!)
-*/
-        // Configure the cell...
-
+        let subject = subjects[indexPath.row]
+        cell.subjectLabel.text = subject["subject"]
+        cell.descrLabel.text = subject["descr"]
+        cell.imageLabel.image = UIImage(named: (subject["imageFile"])!)
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        subjectCounter = indexPath.row
+        return indexPath
+    }
+    /*
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        NSLog("Select a row")
+        // let indexPathOne = tableView.indexPathsForSelectedRows
+        
+        // let currentCell = tableView.cellForRow(at: indexPath)! as UITableViewCell
+        let currentCell = tableView.cellForRow(at: indexPath)
+        NSLog("Current cell is: \(currentCell)")
+        performSegue(withIdentifier: "subjectSegue", sender: currentCell)
+    }
+ */
+    
+    // MARK: - Navigation
+    /*
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "subjectSegue" {
+            let newController = segue.destination as! QuizTimeViewController
+            if let data = sender as? [String : String]? {
+                newController.sentData = data
+            }
+        
+        }
+        
+    }
+ */
+    
+ 
     
 
     /*
@@ -158,15 +131,5 @@ class SubjectsTableViewController: UITableViewController {
         return true
     }
     */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
 }

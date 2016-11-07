@@ -50,7 +50,7 @@
                                     <outlet property="descrLabel" destination="b4j-4q-Cav" id="7Wc-mv-zLE"/>
                                     <outlet property="imageLabel" destination="mVm-sK-Tre" id="7n4-fD-Ipg"/>
                                     <outlet property="subjectLabel" destination="zEL-Y5-oXs" id="YR6-6C-pkI"/>
-                                    <segue destination="5oD-vC-J8z" kind="show" id="e1S-zV-Aqp"/>
+                                    <segue destination="5oD-vC-J8z" kind="show" identifier="subjectSegue" id="e1S-zV-Aqp"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -88,7 +88,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="gj3-fv-vwr"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Georgia" family="Georgia" pointSize="35"/>
+                                <fontDescription key="fontDescription" name="Georgia" family="Georgia" pointSize="25"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -106,7 +106,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zuq-nG-R46" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1730.625" y="44.366197183098592"/>
+            <point key="canvasLocation" x="2166" y="48"/>
         </scene>
         <!--Subject Add View Controller-->
         <scene sceneID="8Ps-2e-Suw">
