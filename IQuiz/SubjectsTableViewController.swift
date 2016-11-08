@@ -27,7 +27,7 @@ class SubjectsTableViewController: UITableViewController {
         self.tableView.tableFooterView = UIView()
         if subjects.count ==  1 {
             subjects.removeAll()
-            subjects.append(["subject": "Mathemathics", "descr": "Hard subject", "imageFile": "math icon"])
+            subjects.append(["subject": "Mathematics", "descr": "Hard subject", "imageFile": "math icon"])
             subjects.append(["subject": "Science", "descr": "Harder subject", "imageFile": "science icon"])
             subjects.append(["subject": "Marvel Super Heroes", "descr": "Pow!", "imageFile": "hero icon"])
             
