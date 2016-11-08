@@ -17,21 +17,51 @@ class QuestionTimeViewController: UIViewController {
     var questionAnswered = 0
     var upperValueForRandomNumber: Int = 0
     var randomQuestion: Int = 0
+    var answerRandomLocation = [Dictionary<Bool,String>()] // Insert a bool to see if it is the correct answer
+    //let boarderColor = UIColor.blue.cgColor
     
     @IBOutlet weak var questionNumberLabel: UILabel!
     @IBOutlet weak var questionLabel: UILabel!
+    @IBOutlet weak var answerALabel: UIButton!
+    @IBOutlet weak var answerBLabel: UIButton!
+    @IBOutlet weak var answerCLabel: UIButton!
+    @IBOutlet weak var answerDLabel: UIButton!
     
     @IBAction func backToSubjectViewButton(_ sender: Any) {
+        
     }
     
     @IBAction func nextButton(_ sender: Any) {
         
     }
+    
     @IBOutlet weak var subjectLabel: UILabel!
 
     @IBAction func backHome(_ sender: Any) {
         self.performSegue(withIdentifier: "BackHome", sender: self)
     }
+    
+    @IBAction func answerAButton(_ sender: UIButton) {
+        if questionCounter == 0 {
+            if question[questionCounter].answer == "2" {
+                questionAnswered += 1
+            }
+        }
+        answerALabel.backgroundColor = UIColor.blue
+    }
+    
+    @IBAction func answerBButton(_ sender: UIButton) {
+        
+    }
+    
+    @IBAction func answerCButton(_ sender: UIButton) {
+        
+    }
+    
+    @IBAction func answerDButton(_ sender: UIButton) {
+        
+    }
+    
     /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "BackHome" {
@@ -55,22 +85,22 @@ class QuestionTimeViewController: UIViewController {
         
         questionNumberLabel.text = "Question: \(questionCounter + 1)"
         
-        NSLog("The Question is: \(question[questionCounter].question)")
+        //NSLog("The Question is: \(question[questionCounter].question)")
         
         questionLabel.text = question[questionCounter].question
-        
+        answerALabel.setTitle(question[questionCounter].answer, for: .normal)
+        answerBLabel.setTitle("It must be A", for: .normal)
+        answerCLabel.setTitle("Maybe all of the above", for: .normal)
+        answerDLabel.setTitle("Must not be anything of them", for: .normal)
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("The value of subjectLabel is: \(subjectLabel)")
-
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func loadData(data: [String:String]) {
@@ -131,6 +161,7 @@ class QuestionTimeViewController: UIViewController {
             question.append(questionTwo)
             question.append(questionThree)
         }
+        
     }
 
 
