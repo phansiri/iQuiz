@@ -10,6 +10,18 @@ import UIKit
 
 class QuestionTimeViewController: UIViewController {
     
+    private var subjectsTableViewController: SubjectsTableViewController!
+    private var uiNavigationController: UINavigationController!
+    
+    private func builderOne() {
+        if subjectsTableViewController == nil {
+            subjectsTableViewController = (storyboard?.instantiateViewController(withIdentifier: "Subjects") as! SubjectsTableViewController)
+        }
+        if uiNavigationController == nil {
+            uiNavigationController = (storyboard?.instantiateViewController(withIdentifier: "NavHome") as! UINavigationController)
+        }
+    }
+    
     //var question = [Dictionary<String,[Dictionary<String,String>]>()]
     //var question = [Dictionary<String,String>()]
     var question = [ModelQuesiton()]
@@ -19,6 +31,7 @@ class QuestionTimeViewController: UIViewController {
     var randomQuestion: Int = 0
     var answerRandomLocation = [Dictionary<Bool,String>()] // Insert a bool to see if it is the correct answer
     //let boarderColor = UIColor.blue.cgColor
+    var isCorrect = false
     
     @IBOutlet weak var questionNumberLabel: UILabel!
     @IBOutlet weak var questionLabel: UILabel!
@@ -27,39 +40,50 @@ class QuestionTimeViewController: UIViewController {
     @IBOutlet weak var answerCLabel: UIButton!
     @IBOutlet weak var answerDLabel: UIButton!
     
-    @IBAction func backToSubjectViewButton(_ sender: Any) {
-        
-    }
-    
     @IBAction func nextButton(_ sender: Any) {
         
     }
     
     @IBOutlet weak var subjectLabel: UILabel!
 
-    @IBAction func backHome(_ sender: Any) {
-        self.performSegue(withIdentifier: "BackHome", sender: self)
-    }
     
     @IBAction func answerAButton(_ sender: UIButton) {
         if questionCounter == 0 {
-            if question[questionCounter].answer == "2" {
+            if question[questionCounter].answer == question[questionCounter].answer {
                 questionAnswered += 1
+                isCorrect = true
             }
         }
         answerALabel.backgroundColor = UIColor.blue
+        answerBLabel.backgroundColor = UIColor.white
+        answerCLabel.backgroundColor = UIColor.white
+        answerDLabel.backgroundColor = UIColor.white
+
     }
     
     @IBAction func answerBButton(_ sender: UIButton) {
-        
+        answerALabel.backgroundColor = UIColor.white
+        answerBLabel.backgroundColor = UIColor.blue
+        answerCLabel.backgroundColor = UIColor.white
+        answerDLabel.backgroundColor = UIColor.white
+        isCorrect = false
     }
     
     @IBAction func answerCButton(_ sender: UIButton) {
-        
+        answerALabel.backgroundColor = UIColor.white
+        answerBLabel.backgroundColor = UIColor.white
+        answerCLabel.backgroundColor = UIColor.blue
+        answerDLabel.backgroundColor = UIColor.white
+        isCorrect = false
+
     }
     
     @IBAction func answerDButton(_ sender: UIButton) {
-        
+        answerALabel.backgroundColor = UIColor.white
+        answerBLabel.backgroundColor = UIColor.white
+        answerCLabel.backgroundColor = UIColor.white
+        answerDLabel.backgroundColor = UIColor.blue
+        isCorrect = false
     }
     
     /*
@@ -151,8 +175,8 @@ class QuestionTimeViewController: UIViewController {
             questionOne.answer = "Superman"
             let questionTwo = ModelQuesiton()
             questionTwo.subject = "hero"
-            questionTwo.question = "Can Superman is weak to?"
-            questionTwo.answer = "Kryptonite"
+            questionTwo.question = "Who can weild Thor's hammer?"
+            questionTwo.answer = "Thor"
             let questionThree = ModelQuesiton()
             questionThree.subject = "hero"
             questionThree.question = "Does Superman beat Batman?"
@@ -162,6 +186,20 @@ class QuestionTimeViewController: UIViewController {
             question.append(questionThree)
         }
         
+    }
+    
+    private func switchViewController(from: UIViewController?, to: UIViewController?) {
+        if from != nil {
+            from!.willMove(toParentViewController: nil)
+            from!.view.removeFromSuperview()
+            from!.removeFromParentViewController()
+        }
+        
+        if to != nil {
+            self.addChildViewController(to!)
+            self.view.insertSubview(to!.view, at: 0)
+            to!.didMove(toParentViewController: self)
+        }
     }
 
 

@@ -18,6 +18,8 @@
 		0C2DFFD21DCB04C70026CD4E /* SubjectsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2DFFD11DCB04C70026CD4E /* SubjectsTableViewCell.swift */; };
 		0C5344961DCBF3A100022A38 /* SubjectAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5344951DCBF3A100022A38 /* SubjectAddViewController.swift */; };
 		0C53450C1DCC44F800022A38 /* QuestionTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C53450B1DCC44F800022A38 /* QuestionTimeViewController.swift */; };
+		0CAA33DF1DD3A26F006AC739 /* AnswerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAA33DE1DD3A26F006AC739 /* AnswerViewController.swift */; };
+		0CAA33E11DD3A27C006AC739 /* FinishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAA33E01DD3A27C006AC739 /* FinishViewController.swift */; };
 		0CD3165F1DCBD9EE00EC3E9D /* ModelQuestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD3165E1DCBD9EE00EC3E9D /* ModelQuestion.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +58,8 @@
 		0C2DFFD11DCB04C70026CD4E /* SubjectsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectsTableViewCell.swift; sourceTree = "<group>"; };
 		0C5344951DCBF3A100022A38 /* SubjectAddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectAddViewController.swift; sourceTree = "<group>"; };
 		0C53450B1DCC44F800022A38 /* QuestionTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionTimeViewController.swift; sourceTree = "<group>"; };
+		0CAA33DE1DD3A26F006AC739 /* AnswerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnswerViewController.swift; sourceTree = "<group>"; };
+		0CAA33E01DD3A27C006AC739 /* FinishViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishViewController.swift; sourceTree = "<group>"; };
 		0CD3165E1DCBD9EE00EC3E9D /* ModelQuestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelQuestion.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,6 +115,8 @@
 				0C2DFFCD1DCB04310026CD4E /* SubjectsTableViewController.swift */,
 				0C2DFFD11DCB04C70026CD4E /* SubjectsTableViewCell.swift */,
 				0C53450B1DCC44F800022A38 /* QuestionTimeViewController.swift */,
+				0CAA33DE1DD3A26F006AC739 /* AnswerViewController.swift */,
+				0CAA33E01DD3A27C006AC739 /* FinishViewController.swift */,
 				0C2DFF9E1DCB03250026CD4E /* Main.storyboard */,
 				0C2DFFA41DCB03250026CD4E /* Assets.xcassets */,
 				0C2DFFA61DCB03250026CD4E /* LaunchScreen.storyboard */,
@@ -279,8 +285,10 @@
 			files = (
 				0C2DFFD21DCB04C70026CD4E /* SubjectsTableViewCell.swift in Sources */,
 				0C5344961DCBF3A100022A38 /* SubjectAddViewController.swift in Sources */,
+				0CAA33E11DD3A27C006AC739 /* FinishViewController.swift in Sources */,
 				0CD3165F1DCBD9EE00EC3E9D /* ModelQuestion.swift in Sources */,
 				0C2DFFA31DCB03250026CD4E /* IQuiz.xcdatamodeld in Sources */,
+				0CAA33DF1DD3A26F006AC739 /* AnswerViewController.swift in Sources */,
 				0C2DFFCE1DCB04310026CD4E /* SubjectsTableViewController.swift in Sources */,
 				0C53450C1DCC44F800022A38 /* QuestionTimeViewController.swift in Sources */,
 				0C2DFF9B1DCB03250026CD4E /* AppDelegate.swift in Sources */,
