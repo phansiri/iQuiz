@@ -23,6 +23,27 @@ class QuestionVC: UIViewController {
     
     @IBAction func answerButton(_ sender: UIButton) {
         quizState.answerPressed = sender.tag
+        if sender.tag == 0 {
+            answerALabel.backgroundColor = UIColor.brown
+            answerBLabel.backgroundColor = UIColor.white
+            answerCLabel.backgroundColor = UIColor.white
+            answerDLabel.backgroundColor = UIColor.white
+        } else if sender.tag == 1 {
+            answerALabel.backgroundColor = UIColor.white
+            answerBLabel.backgroundColor = UIColor.brown
+            answerCLabel.backgroundColor = UIColor.white
+            answerDLabel.backgroundColor = UIColor.white
+        } else if sender.tag == 2 {
+            answerALabel.backgroundColor = UIColor.white
+            answerBLabel.backgroundColor = UIColor.white
+            answerCLabel.backgroundColor = UIColor.brown
+            answerDLabel.backgroundColor = UIColor.white
+        } else if sender.tag == 3 {
+            answerALabel.backgroundColor = UIColor.white
+            answerBLabel.backgroundColor = UIColor.white
+            answerCLabel.backgroundColor = UIColor.white
+            answerDLabel.backgroundColor = UIColor.brown
+        }
     }
     @IBAction func backHomeButton(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
