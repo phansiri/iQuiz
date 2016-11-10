@@ -66,17 +66,6 @@ class SubjectTableVC: UITableViewController {
         hero.desc = "Pow!"
         hero.imageFile = "hero icon"
         
-        /*
-         heroQuestion.text = "Who can pick up Thor's hammer?"
-         heroQuestion.answer = "2"
-         heroQuestion.answers = [
-         "Batman",
-         "The Panther",
-         "Thor",
-         "Bruce Wayne"
-         ]
-         hero.question.append(heroQuestion)
-         */
         heroQuestionTwo.text = "Who is Iron Man?"
         heroQuestionTwo.answer = "1"
         heroQuestionTwo.answers = [

@@ -12,7 +12,10 @@ import CoreData
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    
     var window: UIWindow?
+    
+    /*
     var subjects = [[String:[String:String]]]()
     let math = [
         "imageFile": "math icon",
@@ -37,6 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         subjects.append(["data": hero])
         subjects.append(["data": science])
     }
+    */
+ 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

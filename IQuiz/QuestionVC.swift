@@ -8,7 +8,7 @@
 
 import UIKit
 
-class QuestionVC: UIViewController {
+class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var textLabel: UILabel!
@@ -45,7 +45,10 @@ class QuestionVC: UIViewController {
             answerDLabel.backgroundColor = UIColor.brown
         }
     }
-    @IBAction func backHomeButton(_ sender: UIBarButtonItem) {
+    
+    
+    @IBAction func swipeRight(_ sender: UISwipeGestureRecognizer) {
+        NSLog("Swipe Right: \(sender)")
         dismiss(animated: true, completion: nil)
         if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -53,8 +56,8 @@ class QuestionVC: UIViewController {
         }
     }
     
-    @IBAction func nextToAnswerButton(_ sender: UIBarButtonItem) {
-        
+    @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
+        NSLog("Swipe Left: \(sender)")
         // if pressed on a button
         if quizState.answerPressed != -1 {
             
@@ -72,8 +75,43 @@ class QuestionVC: UIViewController {
                 performSegue(withIdentifier: "AnswerVC", sender: questionModel)
             }
         }
+        //actionButton()
+
+    }
+ 
+    @IBAction func backHomeButton(_ sender: UIBarButtonItem) {
         
+        dismiss(animated: true, completion: nil)
+        if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
+        }
         
+    }
+    
+    @IBAction func nextToAnswerButton(_ sender: UIBarButtonItem) {
+        actionButton()
+    }
+    
+    //func actionButton(_ sender: UIBarButtonItem) {
+    func actionButton() {
+        // if pressed on a button
+        if quizState.answerPressed != -1 {
+            
+            // NSLog("Question Answer: \(Int(questionModel.question[quizState.questionCounter].answer)! - 1)")
+            // NSLog("Button Pressed: \(quizState.answerPressed))")
+            
+            // if answer is correct
+            if (Int(questionModel.question[quizState.questionCounter].answer)! - 1) == quizState.answerPressed {
+                quizState.questionAnsweredCorrectly = quizState.questionAnsweredCorrectly + 1
+                quizState.isCorrect = true
+                performSegue(withIdentifier: "AnswerVC", sender: questionModel)
+            } else { // if answer is not correct
+                quizState.questionAnsweredCorrectly = quizState.questionAnsweredCorrectly + 0
+                quizState.isCorrect = false
+                performSegue(withIdentifier: "AnswerVC", sender: questionModel)
+            }
+        }
     }
     
     override func viewDidLoad() {
@@ -108,7 +146,38 @@ class QuestionVC: UIViewController {
                 answerDLabel.text = question.answers[index]
             }
         }
+        
+        // Swipe Extra Credit
+        /*
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipes:"))
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipes:"))
+        
+        leftSwipe.direction = .left
+        rightSwipe.direction = .right
+        
+        view.addGestureRecognizer(leftSwipe)
+        view.addGestureRecognizer(rightSwipe)
+        */
     }
+    
+    
+    func handleSwipes(sender: UISwipeGestureRecognizer) {
+        if sender.direction == .left {
+            NSLog("Swipe Left")
+            dismiss(animated: true, completion: nil)
+            if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
+            }
+        }
+        if sender.direction == .right {
+            NSLog("Swipe Right")
+            actionButton()
+ 
+        }
+    }
+    
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

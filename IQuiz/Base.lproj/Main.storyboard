@@ -86,7 +86,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subject" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="10K-DI-4qn">
-                                <rect key="frame" x="16" y="28" width="288" height="45"/>
+                                <rect key="frame" x="16" y="72" width="288" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="dao-uj-UCX"/>
                                 </constraints>
@@ -114,7 +114,7 @@
                                 </items>
                             </toolbar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CCa-qd-f18">
-                                <rect key="frame" x="16" y="291" width="45" height="34"/>
+                                <rect key="frame" x="16" y="335" width="45" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="45" id="dxw-Lx-BIO"/>
                                 </constraints>
@@ -126,7 +126,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B3g-MZ-XiE">
-                                <rect key="frame" x="16" y="333" width="45" height="34"/>
+                                <rect key="frame" x="16" y="377" width="45" height="34"/>
                                 <state key="normal" title="B">
                                     <color key="titleColor" red="0.26404436539999998" green="0.98204191600000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -135,7 +135,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A2x-a3-Gp5">
-                                <rect key="frame" x="16" y="375" width="45" height="34"/>
+                                <rect key="frame" x="16" y="419" width="45" height="34"/>
                                 <state key="normal" title="C">
                                     <color key="titleColor" red="0.26404436539999998" green="0.98204191600000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -144,7 +144,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gh2-HC-Cso">
-                                <rect key="frame" x="16" y="417" width="45" height="34"/>
+                                <rect key="frame" x="16" y="461" width="45" height="34"/>
                                 <state key="normal" title="D">
                                     <color key="titleColor" red="0.26404436539999998" green="0.98204191600000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -153,31 +153,31 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dr7-6H-zAM">
-                                <rect key="frame" x="69" y="291" width="235" height="34"/>
+                                <rect key="frame" x="69" y="335" width="235" height="34"/>
                                 <fontDescription key="fontDescription" name="Georgia" family="Georgia" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CCc-fH-fJY">
-                                <rect key="frame" x="69" y="333" width="235" height="34"/>
+                                <rect key="frame" x="69" y="377" width="235" height="34"/>
                                 <fontDescription key="fontDescription" name="Georgia" family="Georgia" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KtN-jg-tvV">
-                                <rect key="frame" x="69" y="375" width="235" height="34"/>
+                                <rect key="frame" x="69" y="419" width="235" height="34"/>
                                 <fontDescription key="fontDescription" name="Georgia" family="Georgia" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y6Z-m6-zt8">
-                                <rect key="frame" x="69" y="417" width="235" height="34"/>
+                                <rect key="frame" x="69" y="461" width="235" height="34"/>
                                 <fontDescription key="fontDescription" name="Georgia" family="Georgia" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Question" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pgj-ID-qoS">
-                                <rect key="frame" x="16" y="81" width="288" height="175"/>
+                                <rect key="frame" x="16" y="125" width="288" height="175"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="175" id="IK2-Xa-U21"/>
                                 </constraints>
@@ -187,6 +187,7 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="Pgj-ID-qoS" firstAttribute="leading" secondItem="CzS-Ev-1tq" secondAttribute="leadingMargin" id="6Vd-FZ-BSp"/>
                             <constraint firstItem="gh2-HC-Cso" firstAttribute="top" secondItem="A2x-a3-Gp5" secondAttribute="bottom" constant="8" symbolic="YES" id="6ph-U2-iYl"/>
@@ -225,6 +226,9 @@
                             <constraint firstItem="Pgj-ID-qoS" firstAttribute="trailing" secondItem="10K-DI-4qn" secondAttribute="trailing" id="tH0-g7-XWu"/>
                             <constraint firstItem="KtN-jg-tvV" firstAttribute="trailing" secondItem="Y6Z-m6-zt8" secondAttribute="trailing" id="wmi-4v-Ysq"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Vec-ts-6QL" appends="YES" id="wgY-dM-Wrw"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="answerALabel" destination="dr7-6H-zAM" id="QWF-fC-8hF"/>
@@ -237,6 +241,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zuq-nG-R46" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="left" id="Q6h-cd-E9C">
+                    <connections>
+                        <action selector="swipeLeft:" destination="5oD-vC-J8z" id="y7j-xn-1u3"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="right" id="Vec-ts-6QL">
+                    <connections>
+                        <action selector="swipeRight:" destination="5oD-vC-J8z" id="ymq-je-bQp"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1822.5" y="47.535211267605632"/>
         </scene>
@@ -320,7 +334,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bB0-8K-h5S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2649" y="48"/>
+            <point key="canvasLocation" x="2655" y="48"/>
         </scene>
         <!--FinishVC-->
         <scene sceneID="JMw-cK-aty">
