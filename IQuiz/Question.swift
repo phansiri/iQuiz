@@ -8,8 +8,8 @@
 
 import UIKit
 
-class ModelQuesiton: NSObject {
-    var subject: String!
-    var question: String!
+class Question: NSObject {
+    var text: String!
     var answer: String!
+    var answers: [String] = []
 }
