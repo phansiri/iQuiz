@@ -18,9 +18,9 @@ class FinishVC: UIViewController {
     
     @IBAction func nextButton(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
-        if let vc3 = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
+        if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.window?.rootViewController!.present(vc3, animated: true, completion: nil)
+            appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
         }
     }
     override func viewDidLoad() {
@@ -30,7 +30,7 @@ class FinishVC: UIViewController {
         
         scoreLabel.text = "\(quizState.questionAnsweredCorrectly!) / \(quizState.maxQuestion!)"
         
-        NSLog("Score: \(score)")
+        // NSLog("Score: \(score)")
         
         if score == 100.0 {
             pickUpWordLabel.text = "Perfect!!!"

@@ -26,9 +26,9 @@ class QuestionVC: UIViewController {
     }
     @IBAction func backHomeButton(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
-        if let vc3 = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
+        if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.window?.rootViewController!.present(vc3, animated: true, completion: nil)
+            appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
         }
     }
     
