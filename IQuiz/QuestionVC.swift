@@ -48,7 +48,7 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     
     
     @IBAction func swipeRight(_ sender: UISwipeGestureRecognizer) {
-        NSLog("Swipe Right: \(sender)")
+        // NSLog("Swipe Right: \(sender)")
         dismiss(animated: true, completion: nil)
         if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -57,7 +57,7 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
-        NSLog("Swipe Left: \(sender)")
+        // NSLog("Swipe Left: \(sender)")
         
         // if pressed on a button
         if quizState.answerPressed != -1 {

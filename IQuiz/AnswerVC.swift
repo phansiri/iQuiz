@@ -60,9 +60,6 @@ class AnswerVC: UIViewController {
         
         quizState.questionCounter = quizState.questionCounter + 1
         
-        print(quizState.questionCounter)
-        print(quizState.maxQuestion)
-        
         if quizState.questionCounter != quizState.maxQuestion {
             
             quizState.isCorrect = false
