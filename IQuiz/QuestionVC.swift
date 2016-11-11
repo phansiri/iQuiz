@@ -58,12 +58,10 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     
     @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
         NSLog("Swipe Left: \(sender)")
+        
         // if pressed on a button
         if quizState.answerPressed != -1 {
-            
-            // NSLog("Question Answer: \(Int(questionModel.question[quizState.questionCounter].answer)! - 1)")
-            // NSLog("Button Pressed: \(quizState.answerPressed))")
-            
+        
             // if answer is correct
             if (Int(questionModel.question[quizState.questionCounter].answer)! - 1) == quizState.answerPressed {
                 quizState.questionAnsweredCorrectly = quizState.questionAnsweredCorrectly + 1
@@ -75,8 +73,6 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
                 performSegue(withIdentifier: "AnswerVC", sender: questionModel)
             }
         }
-        //actionButton()
-
     }
  
     @IBAction func backHomeButton(_ sender: UIBarButtonItem) {
@@ -98,9 +94,6 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
         // if pressed on a button
         if quizState.answerPressed != -1 {
             
-            // NSLog("Question Answer: \(Int(questionModel.question[quizState.questionCounter].answer)! - 1)")
-            // NSLog("Button Pressed: \(quizState.answerPressed))")
-            
             // if answer is correct
             if (Int(questionModel.question[quizState.questionCounter].answer)! - 1) == quizState.answerPressed {
                 quizState.questionAnsweredCorrectly = quizState.questionAnsweredCorrectly + 1
@@ -121,15 +114,6 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
         
         textLabel.text = questionModel.question[quizState.questionCounter].text
         
-        /*
-         NSLog("QuestionVC -viewDidLoad- counter: \(quizState.questionCounter)")
-         NSLog("QuestionVC -viewDidLoad- correctly answered: \(quizState.questionAnsweredCorrectly)")
-         NSLog("QuestionVC -viewDidLoad- maxQ: \(quizState.maxQuestion)")
-         NSLog("QuestionVC -viewDidLoad- isCorrect: \(quizState.isCorrect)")
-         NSLog("QuestionVC -viewDidLoad- answerPressed: \(quizState.answerPressed)")
-         */
-        
-        
         let numberOfAnswers = Int((questionModel.question[quizState.questionCounter].answers.count)) - 1
         let question = questionModel.question[quizState.questionCounter]
         for index in 0...numberOfAnswers {
@@ -146,39 +130,8 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
                 answerDLabel.text = question.answers[index]
             }
         }
-        
-        // Swipe Extra Credit
-        /*
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipes:"))
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipes:"))
-        
-        leftSwipe.direction = .left
-        rightSwipe.direction = .right
-        
-        view.addGestureRecognizer(leftSwipe)
-        view.addGestureRecognizer(rightSwipe)
-        */
     }
-    
-    
-    func handleSwipes(sender: UISwipeGestureRecognizer) {
-        if sender.direction == .left {
-            NSLog("Swipe Left")
-            dismiss(animated: true, completion: nil)
-            if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
-            }
-        }
-        if sender.direction == .right {
-            NSLog("Swipe Right")
-            actionButton()
- 
-        }
-    }
-    
-    
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -191,8 +144,6 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
             }
         }
     }
-    
-    
     
 }
 

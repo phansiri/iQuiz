@@ -25,6 +25,36 @@ class AnswerVC: UIViewController {
             appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
         }
     }
+    @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
+        quizState.questionCounter = quizState.questionCounter + 1
+        
+        print(quizState.questionCounter)
+        print(quizState.maxQuestion)
+        
+        if quizState.questionCounter != quizState.maxQuestion {
+            
+            quizState.isCorrect = false
+            quizState.answerPressed = -1
+            
+            // NSLog("AnswerVC to QuestionVC -counter not equal to max: \(quizState.questionCounter)")
+            
+            performSegue(withIdentifier: "QuestionVC", sender: questionModel)
+            
+        } else {
+            
+            // NSLog("AnswerVC to QuestionVC -counter equal to max: \(quizState.questionCounter)")
+            
+            performSegue(withIdentifier: "FinishVC", sender: quizState)
+        }
+    }
+    
+    @IBAction func swipeRight(_ sender: UISwipeGestureRecognizer) {
+        dismiss(animated: true, completion: nil)
+        if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
+        }
+    }
     
     @IBAction func nextButton(_ sender: UIBarButtonItem) {
         

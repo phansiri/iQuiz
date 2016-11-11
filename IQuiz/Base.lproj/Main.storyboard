@@ -227,7 +227,8 @@
                             <constraint firstItem="KtN-jg-tvV" firstAttribute="trailing" secondItem="Y6Z-m6-zt8" secondAttribute="trailing" id="wmi-4v-Ysq"/>
                         </constraints>
                         <connections>
-                            <outletCollection property="gestureRecognizers" destination="Vec-ts-6QL" appends="YES" id="wgY-dM-Wrw"/>
+                            <outletCollection property="gestureRecognizers" destination="tVV-iE-O6I" appends="YES" id="4Vn-d3-itq"/>
+                            <outletCollection property="gestureRecognizers" destination="MID-Xj-yqc" appends="YES" id="NSD-pB-rsv"/>
                         </connections>
                     </view>
                     <connections>
@@ -241,14 +242,14 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zuq-nG-R46" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="left" id="Q6h-cd-E9C">
+                <swipeGestureRecognizer direction="left" id="MID-Xj-yqc" userLabel="Swipe Left">
                     <connections>
-                        <action selector="swipeLeft:" destination="5oD-vC-J8z" id="y7j-xn-1u3"/>
+                        <action selector="swipeLeft:" destination="5oD-vC-J8z" id="GrK-ex-IC4"/>
                     </connections>
                 </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="right" id="Vec-ts-6QL">
+                <swipeGestureRecognizer direction="right" id="tVV-iE-O6I" userLabel="Swipe Right">
                     <connections>
-                        <action selector="swipeRight:" destination="5oD-vC-J8z" id="ymq-je-bQp"/>
+                        <action selector="swipeRight:" destination="5oD-vC-J8z" id="eyn-Sv-kdH"/>
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
@@ -284,7 +285,7 @@
                                 </items>
                             </toolbar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Answer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zxs-ff-XV6">
-                                <rect key="frame" x="16" y="28" width="288" height="45"/>
+                                <rect key="frame" x="16" y="72" width="288" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="4kp-x6-PEz"/>
                                 </constraints>
@@ -293,7 +294,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Question" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TQh-HW-N7Y">
-                                <rect key="frame" x="16" y="81" width="288" height="175"/>
+                                <rect key="frame" x="16" y="125" width="288" height="175"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="175" id="20y-MD-bgC"/>
                                 </constraints>
@@ -302,7 +303,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Answer" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gz3-55-zR2">
-                                <rect key="frame" x="16" y="274" width="288" height="139"/>
+                                <rect key="frame" x="16" y="318" width="288" height="139"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="288" id="JNI-S9-3i8"/>
                                     <constraint firstAttribute="height" constant="139" id="Rge-0i-vkN"/>
@@ -313,6 +314,7 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="gz3-55-zR2" firstAttribute="top" secondItem="TQh-HW-N7Y" secondAttribute="bottom" constant="18" id="7b3-Kd-N0y"/>
                             <constraint firstItem="TQh-HW-N7Y" firstAttribute="top" secondItem="zxs-ff-XV6" secondAttribute="bottom" constant="8" id="DjN-gp-0Y5"/>
@@ -324,6 +326,10 @@
                             <constraint firstItem="zxs-ff-XV6" firstAttribute="trailing" secondItem="90b-8V-3Bo" secondAttribute="trailingMargin" id="fyR-cX-cgz"/>
                             <constraint firstItem="zxs-ff-XV6" firstAttribute="leading" secondItem="90b-8V-3Bo" secondAttribute="leadingMargin" id="na2-DL-YJm"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="aoO-uP-erL" appends="YES" id="0mt-m0-zsq"/>
+                            <outletCollection property="gestureRecognizers" destination="7Ty-Aq-fEW" appends="YES" id="owX-YY-ZMW"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="questionLabel" destination="TQh-HW-N7Y" id="9Iu-Zh-NvD"/>
@@ -333,6 +339,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bB0-8K-h5S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="left" id="aoO-uP-erL" userLabel="Swipe Left">
+                    <connections>
+                        <action selector="swipeLeft:" destination="diU-od-Feu" id="0vH-Op-WIS"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="right" id="7Ty-Aq-fEW" userLabel="Swipe Right">
+                    <connections>
+                        <action selector="swipeRight:" destination="diU-od-Feu" id="Q5U-px-1MU"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2655" y="48"/>
         </scene>
