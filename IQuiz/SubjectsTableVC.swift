@@ -13,6 +13,8 @@ class SubjectTableVC: UITableViewController {
     var subjects = [Subject]()
     var quizState = QuizState()
     
+    var saveModel = SaveModel()
+    
     @IBAction func settingsButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Settings", message: "Settings go here", preferredStyle: .alert)
         // let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -27,6 +29,15 @@ class SubjectTableVC: UITableViewController {
         
         subjects.removeAll()
         
+        
+        saveModel.downloadData {
+            self.subjects = self.saveModel.subjects
+            NSLog("save Models inside download: \(self.saveModel.subjects.count)")
+        }
+        
+        //NSLog("Saved Model Count: \(subjects.count)")
+        
+        /*
         let math = Subject()
         let science = Subject()
         let hero = Subject()
@@ -99,9 +110,15 @@ class SubjectTableVC: UITableViewController {
         subjects.append(math)
         subjects.append(science)
         subjects.append(hero)
-        
+        */
         // Part 3 - json
         
+    }
+    
+    func updateSubject() {
+        for index in 0...saveModel.subjects.count {
+            self.subjects.append(saveModel.subjects[index])
+        }
     }
     
     override func didReceiveMemoryWarning() {

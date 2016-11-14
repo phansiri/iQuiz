@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class Subject: NSObject {
     var title: String!
