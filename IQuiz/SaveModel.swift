@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 
 class SaveModel {
-    var subjects: [Subject] = []
+    var subjects: [SubjectObj] = []
     
     func downloadData(completed: @escaping DownloadComplete) {
         Alamofire.request(BASE_URL).responseJSON { response in
@@ -20,8 +20,8 @@ class SaveModel {
             if let result = resultJSON.value as? [Dictionary<String, Any>] {
                 NSLog("Retrieved JSON")
                 for index in 0...result.count - 1 {
-                    let oneSubject = Subject()
-                    let question = Question()
+                    let oneSubject = SubjectObj()
+                    let question = QuestionObj()
 
                     let obj = result[index]
                     NSLog("Performing calculations on object: \(index)")

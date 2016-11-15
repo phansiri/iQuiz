@@ -17,7 +17,7 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var answerCLabel: UILabel!
     @IBOutlet weak var answerDLabel: UILabel!
     
-    var questionModel: Subject = Subject()
+    var questionModel: SubjectObj = SubjectObj()
     var quizState: QuizState = QuizState()
     
     
@@ -138,7 +138,7 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? AnswerVC {
-            if let subject = sender as? Subject {
+            if let subject = sender as? SubjectObj {
                 destination.questionModel = subject
                 destination.quizState = quizState
             }

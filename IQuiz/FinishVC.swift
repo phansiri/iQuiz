@@ -10,7 +10,7 @@ import UIKit
 
 class FinishVC: UIViewController {
     
-    var questionModel: Subject = Subject()
+    var questionModel: SubjectObj = SubjectObj()
     var quizState: QuizState = QuizState()
     
     @IBOutlet weak var scoreLabel: UILabel!

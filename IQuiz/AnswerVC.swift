@@ -13,7 +13,7 @@ class AnswerVC: UIViewController {
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var resultLabel: UILabel!
     
-    var questionModel: Subject = Subject()
+    var questionModel: SubjectObj = SubjectObj()
     var quizState: QuizState = QuizState()
     
     @IBAction func backHomeButton(_ sender: UIBarButtonItem) {
@@ -107,7 +107,7 @@ class AnswerVC: UIViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? QuestionVC {
-            if let subject = sender as? Subject {
+            if let subject = sender as? SubjectObj {
                 destination.questionModel = subject
                 destination.quizState = quizState
             }

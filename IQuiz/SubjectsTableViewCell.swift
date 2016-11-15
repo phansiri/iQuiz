@@ -14,6 +14,13 @@ class SubjectCellTableViewCell: UITableViewCell {
     @IBOutlet weak var descLabel: UILabel!
     @IBOutlet weak var imageLabel: UIImageView!
     
+    func configureCell(subject: Subject) {
+        titleLabel.text = subject.title
+        descLabel.text = subject.desc
+        imageLabel.image = UIImage(named: (subject.imageFile)!)
+
+    }
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

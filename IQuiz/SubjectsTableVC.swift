@@ -8,23 +8,25 @@
 
 import UIKit
 import Alamofire
+import CoreData
 
-class SubjectTableVC: UITableViewController {
+class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
-    var subjects = [Subject]()
+    var subjects = [SubjectObj]()
     var quizState = QuizState()
     
+    var controller: NSFetchedResultsController<Subject>!
     var refresh: UIRefreshControl!
     
     // saving to UserDefaults
     
     private var records = SubjectTableVC.getData()
-    private static func getData() -> [Subject] {
+    private static func getData() -> [SubjectObj] {
         let data = UserDefaults.standard.array(forKey: "subs")
         if data == nil {
             return Array()
         } else {
-            return data as! [Subject]
+            return data as! [SubjectObj]
         }
     }
     
@@ -63,102 +65,17 @@ class SubjectTableVC: UITableViewController {
         super.viewDidLoad()
         
         subjects.removeAll()
-        
         downloadData {}
-        
-//        refresh = UIRefreshControl()
         
         self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to Refresh")
         self.refreshControl?.backgroundColor = UIColor.darkGray
         self.refreshControl?.tintColor = UIColor.green
         self.refreshControl?.addTarget(self, action: #selector(SubjectTableVC.refreshMe), for: UIControlEvents.valueChanged)
         self.tableView.addSubview(self.refreshControl!)
- 
-        
-//        refresh.attributedTitle = NSAttributedString(string: "Different Pull")
-//        refresh.addTarget(self, action: #selector(SubjectTableVC.handleRefresh(refreshControl:)), for: UIControlEvents.valueChanged)
-//        self.tableView.addSubview(refresh)
 
+        attemptFetch()
     }
-    
-        /*
-        let math = Subject()
-        let science = Subject()
-        let hero = Subject()
-        let mathQuestionOne = Question()
-        let scienceQuestion = Question()
-        //let heroQuestion = Question()
-        let heroQuestionTwo = Question()
-        let heroQuestionThree = Question()
-        let heroQuestionFour = Question()
-        
-        math.title = "Mathematics"
-        math.desc = "Its Math!"
-        math.imageFile = "math icon"
-        mathQuestionOne.text = "What is 1 + 1?"
-        mathQuestionOne.answer = "2"
-        mathQuestionOne.answers = [
-            "42",
-            "2",
-            ".9",
-            "I don't know"
-        ]
-        math.question.append(mathQuestionOne)
-        
-        science.title = "Science"
-        science.desc = "Because Science!"
-        science.imageFile = "science icon"
-        scienceQuestion.text = "What is O element?"
-        scienceQuestion.answer = "4"
-        scienceQuestion.answers = [
-            "Iron",
-            "Nuclear",
-            "I don't know",
-            "Oxygen"]
-        science.question.append(scienceQuestion)
-        
-        hero.title = "Marvel Super Heroes"
-        hero.desc = "Pow!"
-        hero.imageFile = "hero icon"
-        
-        heroQuestionTwo.text = "Who is Iron Man?"
-        heroQuestionTwo.answer = "1"
-        heroQuestionTwo.answers = [
-            "Tony Stark",
-            "Obadiah Stane",
-            "A rock hit by Megadeth",
-            "Nobody knows"
-        ]
-        hero.question.append(heroQuestionTwo)
-        
-        heroQuestionThree.text = "Who founded the X-Men?"
-        heroQuestionThree.answer = "2"
-        heroQuestionThree.answers = [
-            "Tony Stark",
-            "Professor X",
-            "The X-Institute",
-            "Erik Lensherr"
-        ]
-        hero.question.append(heroQuestionThree)
-        
-        heroQuestionFour.text = "How did Spider-Man get his powers?"
-        heroQuestionFour.answer = "1"
-        heroQuestionFour.answers = [
-            "He was bitten by a radioactive spider",
-            "He ate a radioactive spider",
-            "He is a radioactive spider",
-            "He looked at a radioactive spider"
-        ]
-        hero.question.append(heroQuestionFour)
-        
-        subjects.append(math)
-        subjects.append(science)
-        subjects.append(hero)
-        */
-        // Part 3 - json
-        
-    //}
-    
+
     func downloadData(completion: @escaping DownloadComplete) {
         
         subjects.removeAll()
@@ -168,7 +85,7 @@ class SubjectTableVC: UITableViewController {
             
             if let result = resultJSON.value as? [Dictionary<String, AnyObject>] {
                 for index in 0...result.count - 1 {
-                    let oneSubject = Subject()
+                    let oneSubject = SubjectObj()
                     
                     let obj = result[index]
 
@@ -191,7 +108,7 @@ class SubjectTableVC: UITableViewController {
                     // Question portion
                     if let questionObj = obj["questions"] as? [Dictionary<String, AnyObject>] {
                         for questionIndex in 0...questionObj.count - 1 {
-                            let question = Question()
+                            let question = QuestionObj()
                             let firstQuestion = questionObj[questionIndex]
                             if let text = firstQuestion["text"] as? String {
                                 question.text = text.capitalized
@@ -217,27 +134,102 @@ class SubjectTableVC: UITableViewController {
         super.didReceiveMemoryWarning()
     }
     
+    // Core Data code
+    func attemptFetch() {
+        let fetchRequest: NSFetchRequest<Subject> = Subject.fetchRequest()
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        controller.delegate = self
+        self.controller = controller
+        
+        
+        do {
+            try controller.performFetch()
+        } catch {
+            let error = error as NSError
+            NSLog("Attempt Fetch error: \(error)")
+        }
+    }
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch(type) {
+        case.insert:
+            if let indexPath = newIndexPath {
+                tableView.insertRows(at: [indexPath], with: .fade)
+            }
+            break
+        case.delete:
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            break
+        case.update:
+            if let indexPath = indexPath {
+                let cell = tableView.cellForRow(at: indexPath) as! SubjectCellTableViewCell
+                configureCell(cell: cell, indexPath: indexPath as NSIndexPath)
+                // update code
+            }
+            break
+        case.move:
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            if let indexPath = newIndexPath {
+                tableView.insertRows(at: [indexPath], with: .fade)
+            }
+            break
+        }
+    }
+    
+    
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        if let sections = controller.sections {
+            return sections.count
+        }
+        return 0
+
+//        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 90
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return subjects.count
+        if let sections = controller.sections {
+            let sectionInfo = sections[section]
+            return sectionInfo.numberOfObjects
+        }
+        return 0
+//        return subjects.count
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! SubjectCellTableViewCell
-        
-        let subject = subjects[indexPath.row]
-        
-        cell.titleLabel.text = subject.title
-        cell.descLabel.text = subject.desc
-        cell.imageLabel.image = UIImage(named: (subject.imageFile))
-        
+        configureCell(cell: cell, indexPath: indexPath as NSIndexPath)
         return cell
+    }
+    
+    func configureCell(cell: SubjectCellTableViewCell, indexPath: NSIndexPath) {
+        
+        //let subject = subjects[indexPath.row]
+        
+        let sub = controller.object(at: indexPath as IndexPath)
+        cell.configureCell(subject: sub)
+        
+//        cell.titleLabel.text = subject.title
+//        cell.descLabel.text = subject.desc
+//        cell.imageLabel.image = UIImage(named: (subject.imageFile))
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -286,7 +278,7 @@ class SubjectTableVC: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? QuestionVC {
-            if let subject = sender as? Subject {
+            if let subject = sender as? SubjectObj {
                 
                 // NSLog("SubjectTableVC - subject: \(subject)")
                 

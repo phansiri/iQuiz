@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Question: NSObject {
+class QuestionObj: NSObject {
     var text: String!
     var answer: String!
     var answers: [String] = []
