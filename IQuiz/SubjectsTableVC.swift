@@ -12,16 +12,11 @@ import Alamofire
 class SubjectTableVC: UITableViewController {
     
     var subjects = [Subject]()
-    var temp = [Subject]()
     var quizState = QuizState()
     
-    var saveModel: SaveModel!
-    
-    var testInput = ""
-    
-    
+    // saving to UserDefaults
+    /*
     private var records = SubjectTableVC.getData()
-    
     private static func getData() -> [Subject] {
         let data = UserDefaults.standard.array(forKey: "subs")
         if data == nil {
@@ -34,20 +29,20 @@ class SubjectTableVC: UITableViewController {
     func handleRefresh(refreshControl: UIRefreshControl) {
         
         downloadData {
-            self.updateData()
+            //self.updateData()
         }
         
         self.tableView.reloadData()
         refreshControl.endRefreshing()
     }
-    
+    */
     
     @IBAction func settingsButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Settings", message: "Settings go here", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let ok = UIAlertAction(title: "Ok", style: .default) { (_) in
             self.downloadData {
-                self.updateData()
+            
             }
             NSLog("temp \(self.subjects)")
         }
@@ -64,17 +59,12 @@ class SubjectTableVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //subjects.removeAll()
+        subjects.removeAll()
         
-        //saveModel = SaveModel()
-        //downloadData {
-          //  self.updateData()
-        //}
         downloadData {
-            self.updateData()
         }
         
-        self.refreshControl?.addTarget(self, action: #selector(SubjectTableVC.handleRefresh(_:)), for: UIControlEvents.ValueChanged)
+        //self.refreshControl?.addTarget(self, action: #selector(SubjectTableVC.handleRefresh(_:)), for: UIControlEvents.ValueChanged)
 
     }
     
@@ -161,23 +151,20 @@ class SubjectTableVC: UITableViewController {
             let resultJSON = response.result
             //NSLog("Inside Alamofire")
             
-            if let result = resultJSON.value as? [Dictionary<String, Any>] {
+            if let result = resultJSON.value as? [Dictionary<String, AnyObject>] {
                 //NSLog("Retrieved JSON")
                 for index in 0...result.count - 1 {
                     let oneSubject = Subject()
-                    let question = Question()
                     
                     let obj = result[index]
                     //NSLog("Performing calculations on object: \(index)")
                     // Subject portion
-                    let title = obj["title"] as? String
-                    let desc = obj["desc"] as? String
-                    self.testInput = title!
-                    oneSubject.title = title?.capitalized
-                    //NSLog("oneSubject title saved with: \(title)")
-                    oneSubject.desc = desc?.capitalized
-                    //NSLog("oneSubject desc saved with: \(desc)")
-                    
+                    if let title = obj["title"] as? String {
+                        oneSubject.title = title.capitalized
+                    }
+                    if let desc = obj["desc"] as? String {
+                        oneSubject.desc = desc.capitalized
+                    }
                     
                     if oneSubject.title.contains("Math") {
                         oneSubject.imageFile = "math icon"
@@ -191,48 +178,49 @@ class SubjectTableVC: UITableViewController {
                     }
                     
                     // Question portion
-                    let questionObj = obj["questions"] as! [Dictionary<String, Any>]
-                    for questionIndex in 0...questionObj.count - 1 {
-                        let firstQuestion = questionObj[questionIndex]
-                        let text = firstQuestion["text"] as! String
-                        let answer = firstQuestion["answer"] as! String
-                        let answerObj = firstQuestion["answers"] as! [String]
-                        question.text = text.capitalized
-                        //NSLog("Question text saved with: \(text)")
-                        question.answer = answer.capitalized
-                        //NSLog("Question answer saved with: \(answer)")
-                        question.answers = answerObj
-                        //NSLog("Question answers saved with: \(answer)")
-                        oneSubject.question.append(question)
-                        //NSLog("oneSubject questions saved")
+                    if let questionObj = obj["questions"] as? [Dictionary<String, AnyObject>] {
+                        //NSLog("Number of questions for \(oneSubject.title!) = \(questionObj.count)")
+                        for questionIndex in 0...questionObj.count - 1 {
+                            let question = Question()
+                            //NSLog("Inside loog for \(oneSubject.title!): \(questionIndex)")
+                            let firstQuestion = questionObj[questionIndex]
+                            if let text = firstQuestion["text"] as? String {
+                                question.text = text.capitalized
+                                //NSLog("Question text saved with: \(text)")
+                            }
+                            if let answer = firstQuestion["answer"] as? String {
+                                question.answer = answer.capitalized
+                                //NSLog("Question answer saved with: \(answer)")
+                            }
+                            if let answerObj = firstQuestion["answers"] as? [String] {
+                                question.answers = answerObj
+                                //NSLog("Question answers saved with: \(answerObj)")
+                            }
+                            //NSLog("Question: \(question.text!)")
+                            oneSubject.question.append(question)
+                        }
+                        self.subjects.append(oneSubject)
+                        //NSLog("Saved questions for \(oneSubject.title!) = \(oneSubject.question)")
+
                     }
-                    self.temp.append(oneSubject)
+                    self.tableView.reloadData()
                 }
             }
             completion()
         }
     }
-    
-    func updateData() {
-        for index in 0...temp.count - 1 {
-            subjects.append(temp[index])
-        }
-    }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        NSLog("Rows Subjects: \(subjects.count)")
         return subjects.count
     }
     
@@ -241,7 +229,6 @@ class SubjectTableVC: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! SubjectCellTableViewCell
         
         let subject = subjects[indexPath.row]
-        //NSLog("subject: \(subject)")
         
         cell.titleLabel.text = subject.title
         cell.descLabel.text = subject.desc
