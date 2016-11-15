@@ -9,6 +9,6 @@
 import Foundation
 
 var baseURL = "http://tednewardsandbox.site44.com/questions.json"
-let BASE_URL = URL(string: baseURL)
+let BASE_URL = URL(string: baseURL)!
 
 typealias DownloadComplete = () -> ()

@@ -7,36 +7,77 @@
 //
 
 import UIKit
+import Alamofire
 
 class SubjectTableVC: UITableViewController {
     
     var subjects = [Subject]()
+    var temp = [Subject]()
     var quizState = QuizState()
     
-    var saveModel = SaveModel()
+    var saveModel: SaveModel!
+    
+    var testInput = ""
+    
+    
+    private var records = SubjectTableVC.getData()
+    
+    private static func getData() -> [Subject] {
+        let data = UserDefaults.standard.array(forKey: "subs")
+        if data == nil {
+            return Array()
+        } else {
+            return data as! [Subject]
+        }
+    }
+    
+    func handleRefresh(refreshControl: UIRefreshControl) {
+        
+        downloadData {
+            self.updateData()
+        }
+        
+        self.tableView.reloadData()
+        refreshControl.endRefreshing()
+    }
+    
     
     @IBAction func settingsButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Settings", message: "Settings go here", preferredStyle: .alert)
-        // let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let ok = UIAlertAction(title: "Ok", style: .default, handler: nil)
-        // alert.addAction(cancel)
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let ok = UIAlertAction(title: "Ok", style: .default) { (_) in
+            self.downloadData {
+                self.updateData()
+            }
+            NSLog("temp \(self.subjects)")
+        }
+        alert.addAction(cancel)
         alert.addAction(ok)
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        subjects.removeAll()
+        //subjects.removeAll()
         
-        
-        saveModel.downloadData {
-            self.subjects = self.saveModel.subjects
-            NSLog("save Models inside download: \(self.saveModel.subjects.count)")
+        //saveModel = SaveModel()
+        //downloadData {
+          //  self.updateData()
+        //}
+        downloadData {
+            self.updateData()
         }
         
-        //NSLog("Saved Model Count: \(subjects.count)")
-        
+        self.refreshControl?.addTarget(self, action: #selector(SubjectTableVC.handleRefresh(_:)), for: UIControlEvents.ValueChanged)
+
+    }
+    
         /*
         let math = Subject()
         let science = Subject()
@@ -113,11 +154,68 @@ class SubjectTableVC: UITableViewController {
         */
         // Part 3 - json
         
+    //}
+    
+    func downloadData(completion: @escaping DownloadComplete) {
+        Alamofire.request(BASE_URL).responseJSON { response in
+            let resultJSON = response.result
+            //NSLog("Inside Alamofire")
+            
+            if let result = resultJSON.value as? [Dictionary<String, Any>] {
+                //NSLog("Retrieved JSON")
+                for index in 0...result.count - 1 {
+                    let oneSubject = Subject()
+                    let question = Question()
+                    
+                    let obj = result[index]
+                    //NSLog("Performing calculations on object: \(index)")
+                    // Subject portion
+                    let title = obj["title"] as? String
+                    let desc = obj["desc"] as? String
+                    self.testInput = title!
+                    oneSubject.title = title?.capitalized
+                    //NSLog("oneSubject title saved with: \(title)")
+                    oneSubject.desc = desc?.capitalized
+                    //NSLog("oneSubject desc saved with: \(desc)")
+                    
+                    
+                    if oneSubject.title.contains("Math") {
+                        oneSubject.imageFile = "math icon"
+                        //NSLog("oneSubject imageFile saved with: \(oneSubject.imageFile)")
+                    } else if oneSubject.title.contains("Science") {
+                        oneSubject.imageFile = "science icon"
+                        //NSLog("oneSubject imageFile saved with: \(oneSubject.imageFile)")
+                    } else if oneSubject.title.contains("Hero") {
+                        oneSubject.imageFile = "hero icon"
+                        //NSLog("oneSubject imageFile saved with: \(oneSubject.imageFile)")
+                    }
+                    
+                    // Question portion
+                    let questionObj = obj["questions"] as! [Dictionary<String, Any>]
+                    for questionIndex in 0...questionObj.count - 1 {
+                        let firstQuestion = questionObj[questionIndex]
+                        let text = firstQuestion["text"] as! String
+                        let answer = firstQuestion["answer"] as! String
+                        let answerObj = firstQuestion["answers"] as! [String]
+                        question.text = text.capitalized
+                        //NSLog("Question text saved with: \(text)")
+                        question.answer = answer.capitalized
+                        //NSLog("Question answer saved with: \(answer)")
+                        question.answers = answerObj
+                        //NSLog("Question answers saved with: \(answer)")
+                        oneSubject.question.append(question)
+                        //NSLog("oneSubject questions saved")
+                    }
+                    self.temp.append(oneSubject)
+                }
+            }
+            completion()
+        }
     }
     
-    func updateSubject() {
-        for index in 0...saveModel.subjects.count {
-            self.subjects.append(saveModel.subjects[index])
+    func updateData() {
+        for index in 0...temp.count - 1 {
+            subjects.append(temp[index])
         }
     }
     
@@ -134,7 +232,7 @@ class SubjectTableVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        NSLog("Rows Subjects: \(subjects.count)")
         return subjects.count
     }
     
@@ -143,6 +241,7 @@ class SubjectTableVC: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! SubjectCellTableViewCell
         
         let subject = subjects[indexPath.row]
+        //NSLog("subject: \(subject)")
         
         cell.titleLabel.text = subject.title
         cell.descLabel.text = subject.desc
