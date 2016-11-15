@@ -38,13 +38,10 @@ class SubjectTableVC: UITableViewController {
     */
     
     @IBAction func settingsButton(_ sender: UIBarButtonItem) {
-        let alert = UIAlertController(title: "Settings", message: "Settings go here", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Settings", message: "Update Subjects?", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let ok = UIAlertAction(title: "Ok", style: .default) { (_) in
-            self.downloadData {
-            
-            }
-            NSLog("temp \(self.subjects)")
+            self.downloadData {}
         }
         alert.addAction(cancel)
         alert.addAction(ok)
@@ -61,8 +58,7 @@ class SubjectTableVC: UITableViewController {
         
         subjects.removeAll()
         
-        downloadData {
-        }
+        downloadData {}
         
         //self.refreshControl?.addTarget(self, action: #selector(SubjectTableVC.handleRefresh(_:)), for: UIControlEvents.ValueChanged)
 
@@ -147,17 +143,18 @@ class SubjectTableVC: UITableViewController {
     //}
     
     func downloadData(completion: @escaping DownloadComplete) {
+        
+        subjects.removeAll()
+        
         Alamofire.request(BASE_URL).responseJSON { response in
             let resultJSON = response.result
-            //NSLog("Inside Alamofire")
             
             if let result = resultJSON.value as? [Dictionary<String, AnyObject>] {
-                //NSLog("Retrieved JSON")
                 for index in 0...result.count - 1 {
                     let oneSubject = Subject()
                     
                     let obj = result[index]
-                    //NSLog("Performing calculations on object: \(index)")
+
                     // Subject portion
                     if let title = obj["title"] as? String {
                         oneSubject.title = title.capitalized
@@ -168,40 +165,29 @@ class SubjectTableVC: UITableViewController {
                     
                     if oneSubject.title.contains("Math") {
                         oneSubject.imageFile = "math icon"
-                        //NSLog("oneSubject imageFile saved with: \(oneSubject.imageFile)")
                     } else if oneSubject.title.contains("Science") {
                         oneSubject.imageFile = "science icon"
-                        //NSLog("oneSubject imageFile saved with: \(oneSubject.imageFile)")
                     } else if oneSubject.title.contains("Hero") {
                         oneSubject.imageFile = "hero icon"
-                        //NSLog("oneSubject imageFile saved with: \(oneSubject.imageFile)")
                     }
                     
                     // Question portion
                     if let questionObj = obj["questions"] as? [Dictionary<String, AnyObject>] {
-                        //NSLog("Number of questions for \(oneSubject.title!) = \(questionObj.count)")
                         for questionIndex in 0...questionObj.count - 1 {
                             let question = Question()
-                            //NSLog("Inside loog for \(oneSubject.title!): \(questionIndex)")
                             let firstQuestion = questionObj[questionIndex]
                             if let text = firstQuestion["text"] as? String {
                                 question.text = text.capitalized
-                                //NSLog("Question text saved with: \(text)")
                             }
                             if let answer = firstQuestion["answer"] as? String {
                                 question.answer = answer.capitalized
-                                //NSLog("Question answer saved with: \(answer)")
                             }
                             if let answerObj = firstQuestion["answers"] as? [String] {
                                 question.answers = answerObj
-                                //NSLog("Question answers saved with: \(answerObj)")
                             }
-                            //NSLog("Question: \(question.text!)")
                             oneSubject.question.append(question)
                         }
                         self.subjects.append(oneSubject)
-                        //NSLog("Saved questions for \(oneSubject.title!) = \(oneSubject.question)")
-
                     }
                     self.tableView.reloadData()
                 }
