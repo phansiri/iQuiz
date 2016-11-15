@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11542" systemVersion="16B2555" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Answers" representedClassName="Answers" syncable="YES" codeGenerationType="class">
+        <attribute name="answer" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="toQuestion" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Question" inverseName="toAnswers" inverseEntity="Question" syncable="YES"/>
+    </entity>
+    <entity name="Question" representedClassName="Question" syncable="YES" codeGenerationType="class">
+        <attribute name="answer" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="toAnswers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Answers" inverseName="toQuestion" inverseEntity="Answers" syncable="YES"/>
+        <relationship name="toSubject" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subject" inverseName="toQuestion" inverseEntity="Subject" syncable="YES"/>
+    </entity>
+    <entity name="Subject" representedClassName="Subject" syncable="YES" codeGenerationType="class">
+        <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageFile" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="toQuestion" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Question" inverseName="toSubject" inverseEntity="Question" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Subject" positionX="-254" positionY="39" width="128" height="103"/>
+        <element name="Question" positionX="-29" positionY="45" width="128" height="103"/>
+        <element name="Answers" positionX="205" positionY="54" width="128" height="75"/>
+    </elements>
 </model>
