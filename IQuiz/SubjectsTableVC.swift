@@ -14,8 +14,10 @@ class SubjectTableVC: UITableViewController {
     var subjects = [Subject]()
     var quizState = QuizState()
     
+    var refresh: UIRefreshControl!
+    
     // saving to UserDefaults
-    /*
+    
     private var records = SubjectTableVC.getData()
     private static func getData() -> [Subject] {
         let data = UserDefaults.standard.array(forKey: "subs")
@@ -26,16 +28,16 @@ class SubjectTableVC: UITableViewController {
         }
     }
     
-    func handleRefresh(refreshControl: UIRefreshControl) {
-        
-        downloadData {
-            //self.updateData()
+    func refreshMe() {
+        self.downloadData {
+            NSLog("Inside Refreshing and Downloading...")
+            
         }
-        
+        self.refreshControl?.endRefreshing()
         self.tableView.reloadData()
-        refreshControl.endRefreshing()
     }
-    */
+
+ 
     
     @IBAction func settingsButton(_ sender: UIBarButtonItem) {
         let checkAction = UIAlertController(title: "Settings", message: "Shall you update?", preferredStyle: .alert)
@@ -50,16 +52,6 @@ class SubjectTableVC: UITableViewController {
         checkAction.addAction(checkNow)
         checkAction.addAction(cancel)
         self.present(checkAction, animated: true, completion: nil)
-        /*
-        let alert = UIAlertController(title: "Settings", message: "Update Subjects?", preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let ok = UIAlertAction(title: "Ok", style: .default) { (_) in
-            self.downloadData {}
-        }
-        alert.addAction(cancel)
-        alert.addAction(ok)
-        self.present(alert, animated: true, completion: nil)
-        */
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,7 +66,18 @@ class SubjectTableVC: UITableViewController {
         
         downloadData {}
         
-        //self.refreshControl?.addTarget(self, action: #selector(SubjectTableVC.handleRefresh(_:)), for: UIControlEvents.ValueChanged)
+//        refresh = UIRefreshControl()
+        
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to Refresh")
+        self.refreshControl?.backgroundColor = UIColor.darkGray
+        self.refreshControl?.tintColor = UIColor.green
+        self.refreshControl?.addTarget(self, action: #selector(SubjectTableVC.refreshMe), for: UIControlEvents.valueChanged)
+        self.tableView.addSubview(self.refreshControl!)
+ 
+        
+//        refresh.attributedTitle = NSAttributedString(string: "Different Pull")
+//        refresh.addTarget(self, action: #selector(SubjectTableVC.handleRefresh(refreshControl:)), for: UIControlEvents.valueChanged)
+//        self.tableView.addSubview(refresh)
 
     }
     
