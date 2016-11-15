@@ -38,6 +38,19 @@ class SubjectTableVC: UITableViewController {
     */
     
     @IBAction func settingsButton(_ sender: UIBarButtonItem) {
+        let checkAction = UIAlertController(title: "Settings", message: "Shall you update?", preferredStyle: .alert)
+        checkAction.addTextField() { (textField) in
+            textField.placeholder = "\(BASE_URL)"
+        }
+        let checkNow = UIAlertAction(title: "Check Now", style: .default) { (_) in
+            NSLog("Inside Check Now")
+            self.downloadData {}
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        checkAction.addAction(checkNow)
+        checkAction.addAction(cancel)
+        self.present(checkAction, animated: true, completion: nil)
+        /*
         let alert = UIAlertController(title: "Settings", message: "Update Subjects?", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let ok = UIAlertAction(title: "Ok", style: .default) { (_) in
@@ -46,6 +59,7 @@ class SubjectTableVC: UITableViewController {
         alert.addAction(cancel)
         alert.addAction(ok)
         self.present(alert, animated: true, completion: nil)
+        */
     }
     
     override func viewWillAppear(_ animated: Bool) {
