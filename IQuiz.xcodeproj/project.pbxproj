@@ -136,6 +136,8 @@
 				0C2DFFA61DCB03250026CD4E /* LaunchScreen.storyboard */,
 				0C2DFFA91DCB03250026CD4E /* Info.plist */,
 				0C2DFFA11DCB03250026CD4E /* IQuiz.xcdatamodeld */,
+				0C5344951DCBF3A100022A38 /* SubjectAddViewController.swift */,
+				0C50FB481DD988290003A449 /* SaveModel.swift */,
 			);
 			path = IQuiz;
 			sourceTree = "<group>";
@@ -166,7 +168,6 @@
 				0C53450B1DCC44F800022A38 /* QuestionVC.swift */,
 				0CAA33DE1DD3A26F006AC739 /* AnswerVC.swift */,
 				0CAA33E01DD3A27C006AC739 /* FinishVC.swift */,
-				0C5344951DCBF3A100022A38 /* SubjectAddViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -178,7 +179,6 @@
 				0CD3165E1DCBD9EE00EC3E9D /* QuestionObj.swift */,
 				0C70F9DB1DD4E0F000C39CC7 /* QuizState.swift */,
 				0C50FB4A1DD997030003A449 /* Constants.swift */,
-				0C50FB481DD988290003A449 /* SaveModel.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";

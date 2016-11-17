@@ -19,22 +19,23 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     var refresh: UIRefreshControl!
     
     // saving to UserDefaults
-    
-    private var records = SubjectTableVC.getData()
-    private static func getData() -> [SubjectObj] {
-        let data = UserDefaults.standard.array(forKey: "subs")
-        if data == nil {
-            return Array()
-        } else {
-            return data as! [SubjectObj]
-        }
-    }
-    
+//    
+//    private var records = SubjectTableVC.getData()
+//    private static func getData() -> [SubjectObj] {
+//        let data = UserDefaults.standard.array(forKey: "subs")
+//        if data == nil {
+//            return Array()
+//        } else {
+//            return data as! [SubjectObj]
+//        }
+//    }
     func refreshMe() {
-        self.downloadData {
-            NSLog("Inside Refreshing and Downloading...")
-            
-        }
+//        self.subjects.removeAll()
+//        self.downloadData {
+//            NSLog("Inside Refreshing and Downloading...")
+//            
+//        }
+        //attemptFetch()
         self.refreshControl?.endRefreshing()
         self.tableView.reloadData()
     }
@@ -48,7 +49,14 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         }
         let checkNow = UIAlertAction(title: "Check Now", style: .default) { (_) in
             NSLog("Inside Check Now")
-            self.downloadData {}
+            //self.attemptFetch()
+            //self.subjects.removeAll()
+            // need to delete whats in core data before re-downloading the json
+//            self.deleteCoreData()
+            self.downloadData {
+                self.tableView.reloadData()
+            }
+            self.tableView.reloadData()
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         checkAction.addAction(checkNow)
@@ -63,65 +71,81 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         subjects.removeAll()
-        downloadData {}
-        
         self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to Refresh")
         self.refreshControl?.backgroundColor = UIColor.darkGray
         self.refreshControl?.tintColor = UIColor.green
         self.refreshControl?.addTarget(self, action: #selector(SubjectTableVC.refreshMe), for: UIControlEvents.valueChanged)
         self.tableView.addSubview(self.refreshControl!)
-
         attemptFetch()
+
     }
+    
 
     func downloadData(completion: @escaping DownloadComplete) {
-        
         subjects.removeAll()
+        self.deleteCoreData()
         
         Alamofire.request(BASE_URL).responseJSON { response in
             let resultJSON = response.result
-            
             if let result = resultJSON.value as? [Dictionary<String, AnyObject>] {
                 for index in 0...result.count - 1 {
+                    let coreSubject = Subject(context: context)
+                    
                     let oneSubject = SubjectObj()
                     
                     let obj = result[index]
 
                     // Subject portion
                     if let title = obj["title"] as? String {
+                        coreSubject.title = title
                         oneSubject.title = title.capitalized
                     }
+                    
                     if let desc = obj["desc"] as? String {
                         oneSubject.desc = desc.capitalized
+                        coreSubject.desc = desc.capitalized
                     }
                     
                     if oneSubject.title.contains("Math") {
                         oneSubject.imageFile = "math icon"
+                        coreSubject.imageFile = "math icon"
                     } else if oneSubject.title.contains("Science") {
                         oneSubject.imageFile = "science icon"
+                        coreSubject.imageFile = "science icon"
                     } else if oneSubject.title.contains("Hero") {
                         oneSubject.imageFile = "hero icon"
+                        coreSubject.imageFile = "hero icon"
                     }
                     
                     // Question portion
                     if let questionObj = obj["questions"] as? [Dictionary<String, AnyObject>] {
                         for questionIndex in 0...questionObj.count - 1 {
                             let question = QuestionObj()
+                            let coreQuestion = Question(context: context)
+                            let coreAnswers = Answers(context: context)
+                            
                             let firstQuestion = questionObj[questionIndex]
                             if let text = firstQuestion["text"] as? String {
                                 question.text = text.capitalized
+                                coreQuestion.text = text.capitalized
                             }
                             if let answer = firstQuestion["answer"] as? String {
                                 question.answer = answer.capitalized
+                                coreQuestion.answer = answer.capitalized
                             }
                             if let answerObj = firstQuestion["answers"] as? [String] {
                                 question.answers = answerObj
+                                for index in 0...answerObj.count - 1 {
+                                    coreAnswers.answer = answerObj[index]
+                                    coreAnswers.toQuestion = coreQuestion
+                                }
                             }
                             oneSubject.question.append(question)
+                            coreQuestion.toSubject = coreSubject
                         }
                         self.subjects.append(oneSubject)
+                        ad.saveContext()
                     }
                     self.tableView.reloadData()
                 }
@@ -136,17 +160,33 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     
     // Core Data code
     func attemptFetch() {
+        subjects.removeAll()
         let fetchRequest: NSFetchRequest<Subject> = Subject.fetchRequest()
+        
+        let titleSort = NSSortDescriptor(key: "title", ascending: true)
+        
+        fetchRequest.sortDescriptors = [titleSort]
+        
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         controller.delegate = self
         self.controller = controller
-        
-        
         do {
             try controller.performFetch()
+            //NSLog("controller after performFetch: \(self.controller)")
         } catch {
             let error = error as NSError
             NSLog("Attempt Fetch error: \(error)")
+        }
+    }
+    
+    func deleteCoreData() {
+        let fetchRequest: NSFetchRequest<Subject> = Subject.fetchRequest()
+        let batchDeleteRequest: NSBatchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
+        do {
+            try context.execute(batchDeleteRequest)
+        } catch {
+            let error = error as NSError
+            NSLog("Attempt Delete error: \(error)")
         }
     }
     
@@ -196,7 +236,6 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
             return sections.count
         }
         return 0
-
 //        return 1
     }
     
@@ -207,6 +246,7 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = controller.sections {
             let sectionInfo = sections[section]
+            NSLog("Section Info: \(sectionInfo.numberOfObjects)")
             return sectionInfo.numberOfObjects
         }
         return 0
@@ -232,10 +272,19 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
 //        cell.imageLabel.image = UIImage(named: (subject.imageFile))
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let subject = subjects[indexPath.row]
-        performSegue(withIdentifier: "QuestionVC", sender: subject)
-    }
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        
+//        if let objs = controller.fetchedObjects , objs.count > 0 {
+//            
+//            let sub = objs[indexPath.row]
+//            NSLog("Sub: \(sub)")
+//            performSegue(withIdentifier: "QuestionVC", sender: sub)
+//        }
+    
+//        let subject = subjects[indexPath.row]
+//        performSegue(withIdentifier: "QuestionVC", sender: subject)
+        
+//    }
     
     /*
      // Override to support conditional editing of the table view.
@@ -277,28 +326,33 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? QuestionVC {
-            if let subject = sender as? SubjectObj {
-                
-                // NSLog("SubjectTableVC - subject: \(subject)")
-                
-                // subject and questions
-                destination.questionModel = subject
-                
-                // quiz state initated and sent over
-                quizState.questionCounter = 0
-                quizState.questionAnsweredCorrectly = 0
-                quizState.maxQuestion = subject.question.count
-                quizState.answerPressed = -1
-                quizState.isCorrect = false
-                
-                // NSLog("SubjectTableVC - quizState: \(quizState)")
-                
-                
-                destination.quizState = quizState
-                
+        if segue.identifier == "QuestionVC" {
+            if let destination = segue.destination as? QuestionVC {
+                if let sub = sender as? Subject {
+                    destination.subjectCoreData = sub
+                }
             }
         }
+        
+//        if let destination = segue.destination as? QuestionVC {
+//            if let subject = sender as? SubjectObj {
+//                
+//                // subject and questions
+//                destination.questionModel = subject
+//                
+//                // quiz state initated and sent over
+//                quizState.questionCounter = 0
+//                quizState.questionAnsweredCorrectly = 0
+//                quizState.maxQuestion = subject.question.count
+//                quizState.answerPressed = -1
+//                quizState.isCorrect = false
+//                
+//                
+//                
+//                destination.quizState = quizState
+//                
+//            }
+//        }
     }
     
     

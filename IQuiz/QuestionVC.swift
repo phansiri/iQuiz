@@ -18,6 +18,7 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var answerDLabel: UILabel!
     
     var questionModel: SubjectObj = SubjectObj()
+    var subjectCoreData: Subject?
     var quizState: QuizState = QuizState()
     
     
@@ -110,25 +111,38 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if subjectCoreData != nil {
+            loadSubject()
+        }
+        
         questionLabel.text = questionModel.title
         
-        textLabel.text = questionModel.question[quizState.questionCounter].text
-        
-        let numberOfAnswers = Int((questionModel.question[quizState.questionCounter].answers.count)) - 1
-        let question = questionModel.question[quizState.questionCounter]
-        for index in 0...numberOfAnswers {
-            if index == 0 {
-                answerALabel.text = question.answers[index]
+//        textLabel.text = questionModel.question[quizState.questionCounter].text
+//        
+//        let numberOfAnswers = Int((questionModel.question[quizState.questionCounter].answers.count)) - 1
+//        let question = questionModel.question[quizState.questionCounter]
+//        for index in 0...numberOfAnswers {
+//            if index == 0 {
+//                answerALabel.text = question.answers[index]
+//            }
+//            if index == 1 {
+//                answerBLabel.text = question.answers[index]
+//            }
+//            if index == 2 {
+//                answerCLabel.text = question.answers[index]
+//            }
+//            if index == 3 {
+//                answerDLabel.text = question.answers[index]
+//            }
+//        }
+    }
+    
+    func loadSubject() {
+        if let subject = subjectCoreData {
+            if let questionCoreData = subject.toQuestion?.value(forKey: "Math") {
+                NSLog("QuestionCoreData: \(questionCoreData)")
             }
-            if index == 1 {
-                answerBLabel.text = question.answers[index]
-            }
-            if index == 2 {
-                answerCLabel.text = question.answers[index]
-            }
-            if index == 3 {
-                answerDLabel.text = question.answers[index]
-            }
+            
         }
     }
 
