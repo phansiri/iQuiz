@@ -12,36 +12,18 @@ import CoreData
 
 class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
-    var subjects = [SubjectObj]()
+    //var subjects = [SubjectObj]()
     var quizState = QuizState()
-    
     var controller: NSFetchedResultsController<Subject>!
     var refresh: UIRefreshControl!
     
-    // saving to UserDefaults
-//    
-//    private var records = SubjectTableVC.getData()
-//    private static func getData() -> [SubjectObj] {
-//        let data = UserDefaults.standard.array(forKey: "subs")
-//        if data == nil {
-//            return Array()
-//        } else {
-//            return data as! [SubjectObj]
-//        }
-//    }
     func refreshMe() {
-//        self.subjects.removeAll()
-//        self.downloadData {
-//            NSLog("Inside Refreshing and Downloading...")
-//            
-//        }
-        //attemptFetch()
+        updateCoreData()
+        attemptFetch()
         self.refreshControl?.endRefreshing()
         self.tableView.reloadData()
     }
 
- 
-    
     @IBAction func settingsButton(_ sender: UIBarButtonItem) {
         let checkAction = UIAlertController(title: "Settings", message: "Shall you update?", preferredStyle: .alert)
         checkAction.addTextField() { (textField) in
@@ -49,17 +31,20 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         }
         let checkNow = UIAlertAction(title: "Check Now", style: .default) { (_) in
             NSLog("Inside Check Now")
-            //self.attemptFetch()
-            //self.subjects.removeAll()
-            // need to delete whats in core data before re-downloading the json
-//            self.deleteCoreData()
-            self.downloadData {
-                self.tableView.reloadData()
-            }
+            self.updateCoreData()
+            self.attemptFetch()
             self.tableView.reloadData()
+        }
+        let delete = UIAlertAction(title: "Delete", style: .default) { (_) in
+            NSLog("Inside Delete Now")
+            self.deleteCoreData()
+            self.attemptFetch()
+            self.tableView.reloadData()
+            
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         checkAction.addAction(checkNow)
+        checkAction.addAction(delete)
         checkAction.addAction(cancel)
         self.present(checkAction, animated: true, completion: nil)
     }
@@ -71,7 +56,7 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        subjects.removeAll()
+        //subjects.removeAll()
         self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to Refresh")
         self.refreshControl?.backgroundColor = UIColor.darkGray
         self.refreshControl?.tintColor = UIColor.green
@@ -82,27 +67,23 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     }
     
 
+    // Download JSON from web and store it into Core Data
     func downloadData(completion: @escaping DownloadComplete) {
-        subjects.removeAll()
-        self.deleteCoreData()
-        
         Alamofire.request(BASE_URL).responseJSON { response in
             let resultJSON = response.result
             if let result = resultJSON.value as? [Dictionary<String, AnyObject>] {
                 for index in 0...result.count - 1 {
                     let coreSubject = Subject(context: context)
-                    
                     let oneSubject = SubjectObj()
+                    let subjectObj = result[index]
                     
-                    let obj = result[index]
-
                     // Subject portion
-                    if let title = obj["title"] as? String {
-                        coreSubject.title = title
+                    if let title = subjectObj["title"] as? String {
+                        coreSubject.title = title.capitalized
                         oneSubject.title = title.capitalized
                     }
                     
-                    if let desc = obj["desc"] as? String {
+                    if let desc = subjectObj["desc"] as? String {
                         oneSubject.desc = desc.capitalized
                         coreSubject.desc = desc.capitalized
                     }
@@ -118,36 +99,36 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
                         coreSubject.imageFile = "hero icon"
                     }
                     
-                    // Question portion
-                    if let questionObj = obj["questions"] as? [Dictionary<String, AnyObject>] {
-                        for questionIndex in 0...questionObj.count - 1 {
-                            let question = QuestionObj()
+                    // Should be the correct way to store data
+                    // Question
+                    let questionData = coreSubject.toQuestion?.mutableCopy() as! NSMutableSet
+                    
+                    if let questionObj = subjectObj["questions"] as? [Dictionary<String, AnyObject>] {
+                        for qIndex in 0...questionObj.count - 1 {
+                            let currQ = questionObj[qIndex]
+                            let text = currQ["text"] as? String
+                            let answer = currQ["answer"] as? String
                             let coreQuestion = Question(context: context)
-                            let coreAnswers = Answers(context: context)
+                            coreQuestion.text = text
+                            coreQuestion.answer = answer
                             
-                            let firstQuestion = questionObj[questionIndex]
-                            if let text = firstQuestion["text"] as? String {
-                                question.text = text.capitalized
-                                coreQuestion.text = text.capitalized
-                            }
-                            if let answer = firstQuestion["answer"] as? String {
-                                question.answer = answer.capitalized
-                                coreQuestion.answer = answer.capitalized
-                            }
-                            if let answerObj = firstQuestion["answers"] as? [String] {
-                                question.answers = answerObj
-                                for index in 0...answerObj.count - 1 {
-                                    coreAnswers.answer = answerObj[index]
-                                    coreAnswers.toQuestion = coreQuestion
+                            
+                            // Answers
+                            let answerData = coreQuestion.toAnswers?.mutableCopy() as! NSMutableSet
+                            if let ansDictObj = currQ["answers"] as? [String] {
+                                for answerDetail in ansDictObj {
+                                    let coreAnswer = Answers(context: context)
+                                    coreAnswer.answer = answerDetail
+                                    answerData.add(coreAnswer)
+                                    coreQuestion.addToToAnswers(answerData)
                                 }
                             }
-                            oneSubject.question.append(question)
-                            coreQuestion.toSubject = coreSubject
+                            
+                            questionData.add(coreQuestion)
+                            coreSubject.addToToQuestion(questionData)
                         }
-                        self.subjects.append(oneSubject)
-                        ad.saveContext()
                     }
-                    self.tableView.reloadData()
+                    ad.saveContext()
                 }
             }
             completion()
@@ -160,13 +141,9 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     
     // Core Data code
     func attemptFetch() {
-        subjects.removeAll()
         let fetchRequest: NSFetchRequest<Subject> = Subject.fetchRequest()
-        
         let titleSort = NSSortDescriptor(key: "title", ascending: true)
-        
         fetchRequest.sortDescriptors = [titleSort]
-        
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         controller.delegate = self
         self.controller = controller
@@ -179,14 +156,40 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         }
     }
     
+    // Delete Core Data Information
     func deleteCoreData() {
-        let fetchRequest: NSFetchRequest<Subject> = Subject.fetchRequest()
-        let batchDeleteRequest: NSBatchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
+        let subjectRequest: NSFetchRequest<Subject> = Subject.fetchRequest()
+        let questionRequest: NSFetchRequest<Question> = Question.fetchRequest()
+        let answersRequest: NSFetchRequest<Answers> = Answers.fetchRequest()
+        var deleteData: NSBatchDeleteRequest
+        var deleteResult: NSPersistentStoreResult
+        
         do {
-            try context.execute(batchDeleteRequest)
+            // delete subject
+            deleteData = NSBatchDeleteRequest(fetchRequest: subjectRequest as! NSFetchRequest<NSFetchRequestResult>)
+            deleteResult = try context.execute(deleteData)
+            NSLog("Deleting Subjects... \(deleteResult)")
+            
+            // delete question
+            deleteData = NSBatchDeleteRequest(fetchRequest: questionRequest as! NSFetchRequest<NSFetchRequestResult>)
+            deleteResult = try context.execute(deleteData)
+            NSLog("Deleting Questions... \(deleteResult)")
+            
+            // delete answers
+            deleteData = NSBatchDeleteRequest(fetchRequest: answersRequest as! NSFetchRequest<NSFetchRequestResult>)
+            deleteResult = try context.execute(deleteData)
+            NSLog("Deleting Answers... \(deleteResult)")
         } catch {
             let error = error as NSError
             NSLog("Attempt Delete error: \(error)")
+        }
+    }
+    
+    // grab existing data, delete them and re-download them
+    func updateCoreData() {
+        deleteCoreData()
+        downloadData {
+            self.tableView.reloadData()
         }
     }
     
@@ -230,7 +233,6 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     
     
     // MARK: - Table view data source
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
         if let sections = controller.sections {
             return sections.count
@@ -266,10 +268,7 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         
         let sub = controller.object(at: indexPath as IndexPath)
         cell.configureCell(subject: sub)
-        
-//        cell.titleLabel.text = subject.title
-//        cell.descLabel.text = subject.desc
-//        cell.imageLabel.image = UIImage(named: (subject.imageFile))
+
     }
     
 //    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
