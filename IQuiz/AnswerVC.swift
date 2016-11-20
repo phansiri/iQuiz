@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class AnswerVC: UIViewController {
     
@@ -14,6 +15,7 @@ class AnswerVC: UIViewController {
     @IBOutlet weak var resultLabel: UILabel!
     
     var questionModel: SubjectObj = SubjectObj()
+    var subjectCoreData: Subject?
     var quizState: QuizState = QuizState()
     
     @IBAction func backHomeButton(_ sender: UIBarButtonItem) {

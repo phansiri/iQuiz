@@ -17,8 +17,8 @@
         <relationship name="toQuestion" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Question" inverseName="toSubject" inverseEntity="Question" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Subject" positionX="-254" positionY="39" width="128" height="103"/>
-        <element name="Question" positionX="-29" positionY="45" width="128" height="103"/>
         <element name="Answers" positionX="205" positionY="54" width="128" height="75"/>
+        <element name="Question" positionX="-29" positionY="45" width="128" height="105"/>
+        <element name="Subject" positionX="-254" positionY="39" width="128" height="105"/>
     </elements>
 </model>

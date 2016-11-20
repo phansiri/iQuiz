@@ -12,7 +12,6 @@ import CoreData
 
 class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
-    //var subjects = [SubjectObj]()
     var quizState = QuizState()
     var controller: NSFetchedResultsController<Subject>!
     var refresh: UIRefreshControl!
@@ -23,7 +22,7 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         self.refreshControl?.endRefreshing()
         self.tableView.reloadData()
     }
-
+    
     @IBAction func settingsButton(_ sender: UIBarButtonItem) {
         let checkAction = UIAlertController(title: "Settings", message: "Shall you update?", preferredStyle: .alert)
         checkAction.addTextField() { (textField) in
@@ -56,17 +55,16 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //subjects.removeAll()
         self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to Refresh")
         self.refreshControl?.backgroundColor = UIColor.darkGray
         self.refreshControl?.tintColor = UIColor.green
         self.refreshControl?.addTarget(self, action: #selector(SubjectTableVC.refreshMe), for: UIControlEvents.valueChanged)
         self.tableView.addSubview(self.refreshControl!)
         attemptFetch()
-
+        
     }
     
-
+    
     // Download JSON from web and store it into Core Data
     func downloadData(completion: @escaping DownloadComplete) {
         Alamofire.request(BASE_URL).responseJSON { response in
@@ -74,28 +72,22 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
             if let result = resultJSON.value as? [Dictionary<String, AnyObject>] {
                 for index in 0...result.count - 1 {
                     let coreSubject = Subject(context: context)
-                    let oneSubject = SubjectObj()
                     let subjectObj = result[index]
                     
                     // Subject portion
                     if let title = subjectObj["title"] as? String {
                         coreSubject.title = title.capitalized
-                        oneSubject.title = title.capitalized
                     }
                     
                     if let desc = subjectObj["desc"] as? String {
-                        oneSubject.desc = desc.capitalized
                         coreSubject.desc = desc.capitalized
                     }
                     
-                    if oneSubject.title.contains("Math") {
-                        oneSubject.imageFile = "math icon"
+                    if (coreSubject.title?.contains("Math"))! {
                         coreSubject.imageFile = "math icon"
-                    } else if oneSubject.title.contains("Science") {
-                        oneSubject.imageFile = "science icon"
+                    } else if (coreSubject.title?.contains("Science"))! {
                         coreSubject.imageFile = "science icon"
-                    } else if oneSubject.title.contains("Hero") {
-                        oneSubject.imageFile = "hero icon"
+                    } else if (coreSubject.title?.contains("Hero"))! {
                         coreSubject.imageFile = "hero icon"
                     }
                     
@@ -134,7 +126,7 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
             completion()
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -149,7 +141,6 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         self.controller = controller
         do {
             try controller.performFetch()
-            //NSLog("controller after performFetch: \(self.controller)")
         } catch {
             let error = error as NSError
             NSLog("Attempt Fetch error: \(error)")
@@ -238,7 +229,7 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
             return sections.count
         }
         return 0
-//        return 1
+        //        return 1
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -248,11 +239,17 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = controller.sections {
             let sectionInfo = sections[section]
-            NSLog("Section Info: \(sectionInfo.numberOfObjects)")
             return sectionInfo.numberOfObjects
         }
         return 0
-//        return subjects.count
+        //        return subjects.count
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let objs = controller.fetchedObjects , objs.count > 0 {
+            let sub = objs[indexPath.row]
+            performSegue(withIdentifier: "QuestionVC", sender: sub)
+        }
     }
     
     
@@ -262,29 +259,14 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         return cell
     }
     
+    // configures the cell
     func configureCell(cell: SubjectCellTableViewCell, indexPath: NSIndexPath) {
-        
-        //let subject = subjects[indexPath.row]
-        
         let sub = controller.object(at: indexPath as IndexPath)
         cell.configureCell(subject: sub)
-
     }
     
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        
-//        if let objs = controller.fetchedObjects , objs.count > 0 {
-//            
-//            let sub = objs[indexPath.row]
-//            NSLog("Sub: \(sub)")
-//            performSegue(withIdentifier: "QuestionVC", sender: sub)
-//        }
-    
-//        let subject = subjects[indexPath.row]
-//        performSegue(withIdentifier: "QuestionVC", sender: subject)
-        
-//    }
-    
+
+
     /*
      // Override to support conditional editing of the table view.
      override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -329,29 +311,17 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
             if let destination = segue.destination as? QuestionVC {
                 if let sub = sender as? Subject {
                     destination.subjectCoreData = sub
+                    
+                    // quiz state initated and sent over
+                    quizState.questionCounter = 0
+                    quizState.questionAnsweredCorrectly = 0
+                    quizState.answerPressed = -1
+                    quizState.isCorrect = false
+                    destination.quizState = quizState
                 }
             }
         }
-        
-//        if let destination = segue.destination as? QuestionVC {
-//            if let subject = sender as? SubjectObj {
-//                
-//                // subject and questions
-//                destination.questionModel = subject
-//                
-//                // quiz state initated and sent over
-//                quizState.questionCounter = 0
-//                quizState.questionAnsweredCorrectly = 0
-//                quizState.maxQuestion = subject.question.count
-//                quizState.answerPressed = -1
-//                quizState.isCorrect = false
-//                
-//                
-//                
-//                destination.quizState = quizState
-//                
-//            }
-//        }
+
     }
     
     

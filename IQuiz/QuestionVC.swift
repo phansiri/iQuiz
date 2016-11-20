@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     
@@ -19,6 +20,8 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     
     var questionModel: SubjectObj = SubjectObj()
     var subjectCoreData: Subject?
+    lazy var questions = [Question]()
+    lazy var answers = [Answers]()
     var quizState: QuizState = QuizState()
     
     
@@ -111,14 +114,18 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if subjectCoreData != nil {
-            loadSubject()
-        }
+        loadSubject()
         
-        questionLabel.text = questionModel.title
         
-//        textLabel.text = questionModel.question[quizState.questionCounter].text
-//        
+        questionLabel.text = subjectCoreData?.title
+        textLabel.text = questions[quizState.questionCounter].text
+        
+        answerALabel.text = answers[0].answer
+        answerBLabel.text = answers[1].answer
+        answerCLabel.text = answers[2].answer
+        answerDLabel.text = answers[3].answer
+        
+//
 //        let numberOfAnswers = Int((questionModel.question[quizState.questionCounter].answers.count)) - 1
 //        let question = questionModel.question[quizState.questionCounter]
 //        for index in 0...numberOfAnswers {
@@ -138,14 +145,44 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func loadSubject() {
-        if let subject = subjectCoreData {
-            if let questionCoreData = subject.toQuestion?.value(forKey: "Math") {
-                NSLog("QuestionCoreData: \(questionCoreData)")
-            }
-            
-        }
+//        NSLog("QuestionVC : \(subjectCoreData)")
+//        let question = Question(context: context)
+        questions = getQuestion(subject: subjectCoreData!)
+        answers = getAnswers(question: questions[quizState.questionCounter])
+//        NSLog("Questions Counter: \(questions.count)")
+        quizState.maxQuestion = questions.count
+//        NSLog("Quiz state: \(quizState.questionCounter)")
+        
+        
+//        getAnswers(question: questions[quizState.questionCounter])
     }
 
+    // returns an array of questions
+    func getQuestion(subject: Subject) -> [Question] {
+        let questionRequest: NSFetchRequest<Question> = Question.fetchRequest()
+        questionRequest.predicate = NSPredicate(format: "toSubject = %@", subject)
+        
+        do {
+            let questions = try context.fetch(questionRequest)
+            return questions
+        } catch {
+            fatalError("Error in getQuestion")
+        }
+    }
+    
+    // returns an array of answers
+    func getAnswers(question: Question) -> [Answers] {
+        let answersRequest: NSFetchRequest<Answers> = Answers.fetchRequest()
+        answersRequest.predicate = NSPredicate(format: "toQuestion = %@", question)
+        
+        do {
+            let answers = try context.fetch(answersRequest)
+            return answers
+        } catch {
+            fatalError("Error in getQuestion")
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

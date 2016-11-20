@@ -18,7 +18,8 @@ class SubjectCellTableViewCell: UITableViewCell {
         titleLabel.text = subject.title
         descLabel.text = subject.desc
         imageLabel.image = UIImage(named: (subject.imageFile)!)
-
+        imageLabel.layer.borderWidth = 1
+        imageLabel.layer.cornerRadius = 4
     }
     
     
