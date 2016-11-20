@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
+class QuestionVC: UIViewController, UIGestureRecognizerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var textLabel: UILabel!
@@ -17,8 +17,9 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var answerBLabel: UILabel!
     @IBOutlet weak var answerCLabel: UILabel!
     @IBOutlet weak var answerDLabel: UILabel!
+    @IBOutlet weak var answerPickerView: UIPickerView!
     
-    var questionModel: SubjectObj = SubjectObj()
+//    var questionModel: SubjectObj = SubjectObj()
     var subjectCoreData: Subject?
     lazy var questions = [Question]()
     lazy var answers = [Answers]()
@@ -52,52 +53,52 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     
     
     @IBAction func swipeRight(_ sender: UISwipeGestureRecognizer) {
-        // NSLog("Swipe Right: \(sender)")
-        dismiss(animated: true, completion: nil)
-        if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
-        }
+        actionHome()
     }
     
     @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
-        // NSLog("Swipe Left: \(sender)")
-        
-        // if pressed on a button
-        if quizState.answerPressed != -1 {
-        
-            // if answer is correct
-            if (Int(questionModel.question[quizState.questionCounter].answer)! - 1) == quizState.answerPressed {
-                quizState.questionAnsweredCorrectly = quizState.questionAnsweredCorrectly + 1
-                quizState.isCorrect = true
-                performSegue(withIdentifier: "AnswerVC", sender: questionModel)
-            } else { // if answer is not correct
-                quizState.questionAnsweredCorrectly = quizState.questionAnsweredCorrectly + 0
-                quizState.isCorrect = false
-                performSegue(withIdentifier: "AnswerVC", sender: questionModel)
-            }
-        }
+        actionButton()
     }
  
     @IBAction func backHomeButton(_ sender: UIBarButtonItem) {
-        
-        dismiss(animated: true, completion: nil)
-        if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
-        }
-        
+        actionHome()
     }
+    
     
     @IBAction func nextToAnswerButton(_ sender: UIBarButtonItem) {
         actionButton()
     }
     
+    func actionHome() {
+        dismiss(animated: true, completion: nil)
+        if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
+        }
+    }
+    
     //func actionButton(_ sender: UIBarButtonItem) {
     func actionButton() {
+        
+        // check the selected item with correct answer
+        let selectedPickerAnswer = answers[answerPickerView.selectedRow(inComponent: 0)].answer
+        let questionAnswer = questions[quizState.questionCounter].answer
+        
+        if selectedPickerAnswer == questionAnswer {
+            NSLog("They both match")
+            quizState.isCorrect = true
+            quizState.questionAnsweredCorrectly = quizState.questionAnsweredCorrectly + 1
+        } else {
+            NSLog("They don't match")
+            quizState.isCorrect = false
+            quizState.questionAnsweredCorrectly = quizState.questionAnsweredCorrectly + 0
+            quizState.correctAnswer = questionAnswer
+        }
+        performSegue(withIdentifier: "AnswerVC", sender: subjectCoreData)
+        
         // if pressed on a button
+        /*
         if quizState.answerPressed != -1 {
-            
             // if answer is correct
             if (Int(questionModel.question[quizState.questionCounter].answer)! - 1) == quizState.answerPressed {
                 quizState.questionAnsweredCorrectly = quizState.questionAnsweredCorrectly + 1
@@ -109,6 +110,7 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
                 performSegue(withIdentifier: "AnswerVC", sender: questionModel)
             }
         }
+        */
     }
     
     override func viewDidLoad() {
@@ -116,48 +118,35 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
         
         loadSubject()
         
-        
         questionLabel.text = subjectCoreData?.title
         textLabel.text = questions[quizState.questionCounter].text
-        NSLog("Question Answer: \(questions[quizState.questionCounter].answer)")
         
-        answerALabel.text = answers[0].answer
-        answerBLabel.text = answers[1].answer
-        answerCLabel.text = answers[2].answer
-        answerDLabel.text = answers[3].answer
-        
-        
-        
-//
-//        let numberOfAnswers = Int((questionModel.question[quizState.questionCounter].answers.count)) - 1
-//        let question = questionModel.question[quizState.questionCounter]
-//        for index in 0...numberOfAnswers {
-//            if index == 0 {
-//                answerALabel.text = question.answers[index]
-//            }
-//            if index == 1 {
-//                answerBLabel.text = question.answers[index]
-//            }
-//            if index == 2 {
-//                answerCLabel.text = question.answers[index]
-//            }
-//            if index == 3 {
-//                answerDLabel.text = question.answers[index]
-//            }
-//        }
+        answerPickerView.delegate = self
+        answerPickerView.dataSource = self
+    }
+    
+    // Picker boilerplate codes
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        let singleAnswer = answers[row]
+        return singleAnswer.answer
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return answers.count
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        // update to come
     }
     
     func loadSubject() {
-//        NSLog("QuestionVC : \(subjectCoreData)")
-//        let question = Question(context: context)
         questions = getQuestion(subject: subjectCoreData!)
         answers = getAnswers(question: questions[quizState.questionCounter])
-//        NSLog("Questions Counter: \(questions.count)")
         quizState.maxQuestion = questions.count
-//        NSLog("Quiz state: \(quizState.questionCounter)")
-        
-        
-//        getAnswers(question: questions[quizState.questionCounter])
     }
 
     // returns an array of questions
@@ -192,8 +181,8 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? AnswerVC {
-            if let subject = sender as? SubjectObj {
-                destination.questionModel = subject
+            if let subject = sender as? Subject {
+                destination.subjectCoreData = subject
                 destination.quizState = quizState
             }
         }

@@ -16,6 +16,9 @@ class AnswerVC: UIViewController {
     
     var questionModel: SubjectObj = SubjectObj()
     var subjectCoreData: Subject?
+    lazy var questions = [Question]()
+    lazy var answers = [Answers]()
+    lazy var correctAnswer = ""
     var quizState: QuizState = QuizState()
     
     @IBAction func backHomeButton(_ sender: UIBarButtonItem) {
@@ -62,6 +65,7 @@ class AnswerVC: UIViewController {
         
         quizState.questionCounter = quizState.questionCounter + 1
         
+        
         if quizState.questionCounter != quizState.maxQuestion {
             
             quizState.isCorrect = false
@@ -77,23 +81,28 @@ class AnswerVC: UIViewController {
             
             performSegue(withIdentifier: "FinishVC", sender: quizState)
         }
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        questionLabel.text = questionModel.question[quizState.questionCounter].text
+        loadSubject()
+        questionLabel.text = questions[quizState.questionCounter].text
+        
+//        questionLabel.text = questionModel.question[quizState.questionCounter].text
         
         if quizState.isCorrect == true {
             resultLabel.text = "Great Job!"
         } else {
-            let number = Int(questionModel.question[quizState.questionCounter].answer)! - 1
-            let correctAnswer = questionModel.question[quizState.questionCounter]
-            // NSLog("Question Answer: \(number)")
-            // NSLog("Question Counter: \(quizState.questionCounter!)")
-            // NSLog("Question Correct: \(correctAnswer.answers[number])")
-            resultLabel.text = "You got it wrong! The answer is \(correctAnswer.answers[number])"
+            resultLabel.text = "You got it wrong! The answer is \(quizState.correctAnswer!)"
+//            let number = Int(questionModel.question[quizState.questionCounter].answer)! - 1
+//            let correctAnswer = questionModel.question[quizState.questionCounter]
+//            // NSLog("Question Answer: \(number)")
+//            // NSLog("Question Counter: \(quizState.questionCounter!)")
+//            // NSLog("Question Correct: \(correctAnswer.answers[number])")
+//            resultLabel.text = "You got it wrong! The answer is \(correctAnswer.answers[number])"
         }
-        
+
         
         
     }
@@ -102,15 +111,47 @@ class AnswerVC: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
+    func loadSubject() {
+        questions = getQuestion(subject: subjectCoreData!)
+        answers = getAnswers(question: questions[quizState.questionCounter])
+        quizState.maxQuestion = questions.count
+    }
+    
+    // returns an array of questions
+    func getQuestion(subject: Subject) -> [Question] {
+        let questionRequest: NSFetchRequest<Question> = Question.fetchRequest()
+        questionRequest.predicate = NSPredicate(format: "toSubject = %@", subject)
+        
+        do {
+            let questions = try context.fetch(questionRequest)
+            return questions
+        } catch {
+            fatalError("Error in getQuestion")
+        }
+    }
+    
+    // returns an array of answers
+    func getAnswers(question: Question) -> [Answers] {
+        let answersRequest: NSFetchRequest<Answers> = Answers.fetchRequest()
+        answersRequest.predicate = NSPredicate(format: "toQuestion = %@", question)
+        
+        do {
+            let answers = try context.fetch(answersRequest)
+            return answers
+        } catch {
+            fatalError("Error in getQuestion")
+        }
+    }
+    
     
     
     // MARK: - Navigation
-    
+    /*
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? QuestionVC {
             if let subject = sender as? SubjectObj {
-                destination.questionModel = subject
+//                destination.questionModel = subject
                 destination.quizState = quizState
             }
         }
@@ -121,6 +162,6 @@ class AnswerVC: UIViewController {
             }
         }
     }
-    
+    */
     
 }

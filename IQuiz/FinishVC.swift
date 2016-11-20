@@ -12,6 +12,7 @@ import CoreData
 class FinishVC: UIViewController {
     
     var questionModel: SubjectObj = SubjectObj()
+    lazy var questions = [Question]()
     var quizState: QuizState = QuizState()
     
     @IBOutlet weak var scoreLabel: UILabel!

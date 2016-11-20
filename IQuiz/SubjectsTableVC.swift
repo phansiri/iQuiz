@@ -61,6 +61,7 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         self.refreshControl?.addTarget(self, action: #selector(SubjectTableVC.refreshMe), for: UIControlEvents.valueChanged)
         self.tableView.addSubview(self.refreshControl!)
         attemptFetch()
+        tableView.tableFooterView = UIView()
         
     }
     

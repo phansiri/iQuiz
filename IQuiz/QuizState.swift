@@ -14,4 +14,6 @@ class QuizState: NSObject {
     var maxQuestion: Int!
     var answerPressed: Int = -1
     var isCorrect: Bool = false
+    var isPressed: Bool = false
+    var correctAnswer: String!
 }
