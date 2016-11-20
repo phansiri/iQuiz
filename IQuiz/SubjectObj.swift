@@ -9,10 +9,10 @@
 import UIKit
 import Alamofire
 
-class Subject: NSObject {
+class SubjectObj: NSObject {
     var title: String!
     var desc: String!
     var imageFile: String!
-    var question: [Question] = []
+    var question: [QuestionObj] = []
 }
 

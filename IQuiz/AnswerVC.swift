@@ -7,48 +7,36 @@
 //
 
 import UIKit
+import CoreData
 
 class AnswerVC: UIViewController {
     
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var resultLabel: UILabel!
     
-    var questionModel: Subject = Subject()
+    var questionModel: SubjectObj = SubjectObj()
+    var subjectCoreData: Subject?
+    lazy var questions = [Question]()
+    lazy var answers = [Answers]()
+    lazy var correctAnswer = ""
     var quizState: QuizState = QuizState()
     
     @IBAction func backHomeButton(_ sender: UIBarButtonItem) {
-        //navigationController?.popViewController(animated: true)
-        //navigationController?.popViewController(animated: true)
-        dismiss(animated: true, completion: nil)
-        if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
-        }
+        actionHome()
     }
     @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
-        quizState.questionCounter = quizState.questionCounter + 1
-        
-        print(quizState.questionCounter)
-        print(quizState.maxQuestion)
-        
-        if quizState.questionCounter != quizState.maxQuestion {
-            
-            quizState.isCorrect = false
-            quizState.answerPressed = -1
-            
-            // NSLog("AnswerVC to QuestionVC -counter not equal to max: \(quizState.questionCounter)")
-            
-            performSegue(withIdentifier: "QuestionVC", sender: questionModel)
-            
-        } else {
-            
-            // NSLog("AnswerVC to QuestionVC -counter equal to max: \(quizState.questionCounter)")
-            
-            performSegue(withIdentifier: "FinishVC", sender: quizState)
-        }
+        actionButton()
     }
     
     @IBAction func swipeRight(_ sender: UISwipeGestureRecognizer) {
+        actionHome()
+    }
+    
+    @IBAction func nextButton(_ sender: UIBarButtonItem) {
+        actionButton()
+    }
+    
+    private func actionHome() {
         dismiss(animated: true, completion: nil)
         if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -56,69 +44,81 @@ class AnswerVC: UIViewController {
         }
     }
     
-    @IBAction func nextButton(_ sender: UIBarButtonItem) {
-        
+    private func actionButton() {
         quizState.questionCounter = quizState.questionCounter + 1
         
         if quizState.questionCounter != quizState.maxQuestion {
-            
             quizState.isCorrect = false
             quizState.answerPressed = -1
-            
-            // NSLog("AnswerVC to QuestionVC -counter not equal to max: \(quizState.questionCounter)")
-            
-            performSegue(withIdentifier: "QuestionVC", sender: questionModel)
-            
+            performSegue(withIdentifier: "QuestionVC", sender: subjectCoreData)
         } else {
-            
-            // NSLog("AnswerVC to QuestionVC -counter equal to max: \(quizState.questionCounter)")
-            
             performSegue(withIdentifier: "FinishVC", sender: quizState)
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        questionLabel.text = questionModel.question[quizState.questionCounter].text
+        loadSubject()
+        questionLabel.text = questions[quizState.questionCounter].text
         
         if quizState.isCorrect == true {
             resultLabel.text = "Great Job!"
         } else {
-            let number = Int(questionModel.question[quizState.questionCounter].answer)! - 1
-            let correctAnswer = questionModel.question[quizState.questionCounter]
-            // NSLog("Question Answer: \(number)")
-            // NSLog("Question Counter: \(quizState.questionCounter!)")
-            // NSLog("Question Correct: \(correctAnswer.answers[number])")
-            resultLabel.text = "You got it wrong! The answer is \(correctAnswer.answers[number])"
+            resultLabel.text = "You got it wrong! The answer is \(quizState.correctAnswer!)"
         }
-        
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    private func loadSubject() {
+        questions = getQuestion(subject: subjectCoreData!)
+        answers = getAnswers(question: questions[quizState.questionCounter])
+        quizState.maxQuestion = questions.count
+    }
     
+    // returns an array of questions
+    private func getQuestion(subject: Subject) -> [Question] {
+        let questionRequest: NSFetchRequest<Question> = Question.fetchRequest()
+        questionRequest.predicate = NSPredicate(format: "toSubject = %@", subject)
+        do {
+            let questions = try context.fetch(questionRequest)
+            return questions
+        } catch {
+            fatalError("Error in getQuestion")
+        }
+    }
+    
+    // returns an array of answers
+    func getAnswers(question: Question) -> [Answers] {
+        let answersRequest: NSFetchRequest<Answers> = Answers.fetchRequest()
+        answersRequest.predicate = NSPredicate(format: "toQuestion = %@", question)
+        do {
+            let answers = try context.fetch(answersRequest)
+            return answers
+        } catch {
+            fatalError("Error in getQuestion")
+        }
+    }
     
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         if let destination = segue.destination as? QuestionVC {
             if let subject = sender as? Subject {
-                destination.questionModel = subject
+                destination.subjectCoreData = subject
                 destination.quizState = quizState
             }
         }
+        
         if let destination = segue.destination as? FinishVC {
             if let quiz = sender as? QuizState {
-                //destination.questionModel = subject
                 destination.quizState = quiz
             }
         }
     }
-    
-    
 }
