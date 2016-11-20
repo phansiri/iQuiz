@@ -119,11 +119,14 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate {
         
         questionLabel.text = subjectCoreData?.title
         textLabel.text = questions[quizState.questionCounter].text
+        NSLog("Question Answer: \(questions[quizState.questionCounter].answer)")
         
         answerALabel.text = answers[0].answer
         answerBLabel.text = answers[1].answer
         answerCLabel.text = answers[2].answer
         answerDLabel.text = answers[3].answer
+        
+        
         
 //
 //        let numberOfAnswers = Int((questionModel.question[quizState.questionCounter].answers.count)) - 1

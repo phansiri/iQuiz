@@ -102,7 +102,17 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
                             let answer = currQ["answer"] as? String
                             let coreQuestion = Question(context: context)
                             coreQuestion.text = text
-                            coreQuestion.answer = answer
+//                            coreQuestion.answer = answer
+                            
+                            // setting the correct answer for coreQuestion.answer
+                            if let arrayQuestion = currQ["answers"] as? [String] {
+                                for questionIndex in 0...arrayQuestion.count {
+                                    if (Int(answer!)! - 1) == questionIndex {
+                                        coreQuestion.answer = arrayQuestion[questionIndex]
+//                                        NSLog("coreQuestion answer: \(coreQuestion.answer)")                                        
+                                    }
+                                }
+                            }
                             
                             
                             // Answers
