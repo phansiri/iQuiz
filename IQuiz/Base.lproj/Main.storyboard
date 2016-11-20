@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AuS-KF-Lu4">
-    <device id="retina4_0" orientation="portrait">
+    <device id="retina3_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,7 +15,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="Subjects" id="0eq-Jo-71J" customClass="SubjectTableVC" customModule="IQuiz" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="88" sectionHeaderHeight="28" sectionFooterHeight="28" id="DEm-d4-YLe">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -140,13 +140,17 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <pickerView contentMode="scaleAspectFit" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ApU-Wf-hgI">
+                            <pickerView contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="ApU-Wf-hgI">
                                 <rect key="frame" x="16" y="287" width="288" height="237"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="237" id="33G-K4-pgF"/>
+                                </constraints>
                             </pickerView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Please select an answer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mbd-gM-VTt">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please select an answer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mbd-gM-VTt">
                                 <rect key="frame" x="16" y="274" width="288" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Bx6-HP-Rec"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="Georgia" family="Georgia" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -155,6 +159,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="mbd-gM-VTt" firstAttribute="trailing" secondItem="ApU-Wf-hgI" secondAttribute="trailing" id="1KB-dH-XtN"/>
                             <constraint firstItem="ZVK-ba-Rou" firstAttribute="bottom" secondItem="e1d-Dh-ROc" secondAttribute="top" id="1ev-zu-j6J"/>
                             <constraint firstItem="ZVK-ba-Rou" firstAttribute="centerX" secondItem="Pgj-ID-qoS" secondAttribute="centerX" id="2qs-zR-Fws"/>
                             <constraint firstItem="Pgj-ID-qoS" firstAttribute="leading" secondItem="CzS-Ev-1tq" secondAttribute="leadingMargin" id="6Vd-FZ-BSp"/>
@@ -163,11 +168,16 @@
                                 <variation key="heightClass=compact-widthClass=compact" constant="-10"/>
                             </constraint>
                             <constraint firstItem="10K-DI-4qn" firstAttribute="top" secondItem="NWN-UY-ntm" secondAttribute="bottom" constant="8" id="O4Q-ES-2JT"/>
+                            <constraint firstItem="mbd-gM-VTt" firstAttribute="trailing" secondItem="Pgj-ID-qoS" secondAttribute="trailing" id="PVE-9U-0gd"/>
+                            <constraint firstItem="ApU-Wf-hgI" firstAttribute="bottom" secondItem="ZVK-ba-Rou" secondAttribute="top" id="RQe-FW-ih5"/>
+                            <constraint firstItem="mbd-gM-VTt" firstAttribute="centerY" secondItem="CzS-Ev-1tq" secondAttribute="centerY" id="SzE-z5-Qfh"/>
                             <constraint firstItem="Pgj-ID-qoS" firstAttribute="leading" secondItem="10K-DI-4qn" secondAttribute="leading" id="gU8-me-Mug"/>
+                            <constraint firstItem="mbd-gM-VTt" firstAttribute="leading" secondItem="ApU-Wf-hgI" secondAttribute="leading" id="lz6-Gh-XjU"/>
                             <constraint firstItem="ZVK-ba-Rou" firstAttribute="leading" secondItem="CzS-Ev-1tq" secondAttribute="leading" id="qgb-Od-gos"/>
                             <constraint firstItem="Pgj-ID-qoS" firstAttribute="trailing" secondItem="10K-DI-4qn" secondAttribute="trailing" id="tH0-g7-XWu">
                                 <variation key="heightClass=compact-widthClass=compact" constant="-33"/>
                             </constraint>
+                            <constraint firstItem="mbd-gM-VTt" firstAttribute="leading" secondItem="Pgj-ID-qoS" secondAttribute="leading" id="zSi-qq-ROK"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="tVV-iE-O6I" appends="YES" id="4Vn-d3-itq"/>
@@ -303,11 +313,11 @@
                         <viewControllerLayoutGuide type="bottom" id="PN7-Wb-j6E"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="4ct-LJ-sgR">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finish" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m2T-RE-m15">
-                                <rect key="frame" x="16" y="116" width="288" height="45"/>
+                                <rect key="frame" x="16" y="72" width="288" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="hAJ-K4-6sO"/>
                                 </constraints>
@@ -316,7 +326,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7F6-pP-z6Y">
-                                <rect key="frame" x="0.0" y="516" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="428" width="320" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="pmN-xu-Wwf"/>
                                 </constraints>
@@ -330,13 +340,13 @@
                                 </items>
                             </toolbar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sgq-mR-eCo">
-                                <rect key="frame" x="16" y="125" width="288" height="175"/>
+                                <rect key="frame" x="16" y="81" width="288" height="131"/>
                                 <fontDescription key="fontDescription" name="Georgia" family="Georgia" pointSize="30"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pick me up words" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yda-ea-0at">
-                                <rect key="frame" x="16" y="308" width="288" height="138"/>
+                                <rect key="frame" x="16" y="220" width="288" height="138"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="138" id="MX1-Wo-LE3"/>
                                 </constraints>
@@ -391,6 +401,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="enO-EO-Q9f"/>
+        <segue reference="NEd-p3-YZr"/>
     </inferredMetricsTieBreakers>
 </document>
