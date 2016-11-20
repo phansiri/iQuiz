@@ -19,38 +19,10 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate, UIPickerViewDat
     @IBOutlet weak var answerDLabel: UILabel!
     @IBOutlet weak var answerPickerView: UIPickerView!
     
-//    var questionModel: SubjectObj = SubjectObj()
     var subjectCoreData: Subject?
     lazy var questions = [Question]()
     lazy var answers = [Answers]()
     var quizState: QuizState = QuizState()
-    
-    
-    @IBAction func answerButton(_ sender: UIButton) {
-        quizState.answerPressed = sender.tag
-        if sender.tag == 0 {
-            answerALabel.backgroundColor = UIColor.brown
-            answerBLabel.backgroundColor = UIColor.white
-            answerCLabel.backgroundColor = UIColor.white
-            answerDLabel.backgroundColor = UIColor.white
-        } else if sender.tag == 1 {
-            answerALabel.backgroundColor = UIColor.white
-            answerBLabel.backgroundColor = UIColor.brown
-            answerCLabel.backgroundColor = UIColor.white
-            answerDLabel.backgroundColor = UIColor.white
-        } else if sender.tag == 2 {
-            answerALabel.backgroundColor = UIColor.white
-            answerBLabel.backgroundColor = UIColor.white
-            answerCLabel.backgroundColor = UIColor.brown
-            answerDLabel.backgroundColor = UIColor.white
-        } else if sender.tag == 3 {
-            answerALabel.backgroundColor = UIColor.white
-            answerBLabel.backgroundColor = UIColor.white
-            answerCLabel.backgroundColor = UIColor.white
-            answerDLabel.backgroundColor = UIColor.brown
-        }
-    }
-    
     
     @IBAction func swipeRight(_ sender: UISwipeGestureRecognizer) {
         actionHome()
@@ -64,12 +36,12 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate, UIPickerViewDat
         actionHome()
     }
     
-    
     @IBAction func nextToAnswerButton(_ sender: UIBarButtonItem) {
         actionButton()
     }
     
-    func actionHome() {
+    // helper function to go back to the home screen
+    private func actionHome() {
         dismiss(animated: true, completion: nil)
         if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -77,10 +49,8 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate, UIPickerViewDat
         }
     }
     
-    //func actionButton(_ sender: UIBarButtonItem) {
-    func actionButton() {
-
-        // check the selected item with correct answer
+    // helper function to advance the questions to the answer screen
+    private func actionButton() {
         let selectedPickerAnswer = answers[answerPickerView.selectedRow(inComponent: 0)].answer
         let questionAnswer = questions[quizState.questionCounter].answer
         
@@ -95,37 +65,19 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate, UIPickerViewDat
             quizState.correctAnswer = questionAnswer
         }
         performSegue(withIdentifier: "AnswerVC", sender: subjectCoreData)
-        
-        // if pressed on a button
-        /*
-        if quizState.answerPressed != -1 {
-            // if answer is correct
-            if (Int(questionModel.question[quizState.questionCounter].answer)! - 1) == quizState.answerPressed {
-                quizState.questionAnsweredCorrectly = quizState.questionAnsweredCorrectly + 1
-                quizState.isCorrect = true
-                performSegue(withIdentifier: "AnswerVC", sender: questionModel)
-            } else { // if answer is not correct
-                quizState.questionAnsweredCorrectly = quizState.questionAnsweredCorrectly + 0
-                quizState.isCorrect = false
-                performSegue(withIdentifier: "AnswerVC", sender: questionModel)
-            }
-        }
-        */
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         loadSubject()
-        
         questionLabel.text = subjectCoreData?.title
         textLabel.text = questions[quizState.questionCounter].text
-        
         answerPickerView.delegate = self
         answerPickerView.dataSource = self
     }
     
-    // Picker boilerplate codes
+    // PickerView boilerplate codes
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         let singleAnswer = answers[row]
         return singleAnswer.answer
@@ -143,14 +95,15 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate, UIPickerViewDat
         // update to come
     }
     
-    func loadSubject() {
+    // Main helper function to load the passed in data
+    private func loadSubject() {
         questions = getQuestion(subject: subjectCoreData!)
         answers = getAnswers(question: questions[quizState.questionCounter])
         quizState.maxQuestion = questions.count
     }
 
-    // returns an array of questions
-    func getQuestion(subject: Subject) -> [Question] {
+    // helper function that returns an array of questions from the specific Subject
+    private func getQuestion(subject: Subject) -> [Question] {
         if questions.isEmpty {
             let questionRequest: NSFetchRequest<Question> = Question.fetchRequest()
             questionRequest.predicate = NSPredicate(format: "toSubject = %@", subject)
@@ -166,7 +119,7 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate, UIPickerViewDat
     }
     
     // returns an array of answers
-    func getAnswers(question: Question) -> [Answers] {
+    private func getAnswers(question: Question) -> [Answers] {
         if answers.isEmpty {
             let answersRequest: NSFetchRequest<Answers> = Answers.fetchRequest()
             answersRequest.predicate = NSPredicate(format: "toQuestion = %@", question)

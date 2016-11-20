@@ -14,6 +14,7 @@ class SubjectCellTableViewCell: UITableViewCell {
     @IBOutlet weak var descLabel: UILabel!
     @IBOutlet weak var imageLabel: UIImageView!
     
+    // configures the cell
     func configureCell(subject: Subject) {
         titleLabel.text = subject.title
         descLabel.text = subject.desc
@@ -21,7 +22,6 @@ class SubjectCellTableViewCell: UITableViewCell {
         imageLabel.layer.borderWidth = 1
         imageLabel.layer.cornerRadius = 4
     }
-    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,5 +33,4 @@ class SubjectCellTableViewCell: UITableViewCell {
         
         // Configure the view for the selected state
     }
-    
 }

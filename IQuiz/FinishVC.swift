@@ -7,12 +7,9 @@
 //
 
 import UIKit
-import CoreData
 
 class FinishVC: UIViewController {
-    
-    var questionModel: SubjectObj = SubjectObj()
-    lazy var questions = [Question]()
+
     var quizState: QuizState = QuizState()
     
     @IBOutlet weak var scoreLabel: UILabel!
@@ -32,8 +29,6 @@ class FinishVC: UIViewController {
         
         scoreLabel.text = "\(quizState.questionAnsweredCorrectly!) / \(quizState.maxQuestion!)"
         
-        // NSLog("Score: \(score)")
-        
         if score == 100.0 {
             pickUpWordLabel.text = "Perfect!!!"
         } else if score >= 50.0 {
@@ -41,27 +36,10 @@ class FinishVC: UIViewController {
         } else {
             pickUpWordLabel.text = "Better try harder!"
         }
-        
-        // Do any additional setup after loading the view.
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-    
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        /*if let destination = segue.destination as? SubjectTableVC {
-         if let subject = sender as? Subject {
-         
-         }
-         }*/
-    }
-    
-    
 }

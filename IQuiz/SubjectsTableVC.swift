@@ -16,6 +16,7 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
     var controller: NSFetchedResultsController<Subject>!
     var refresh: UIRefreshControl!
     
+    // when the user pulls down the table view, it'll update from the website json
     func refreshMe() {
         updateCoreData()
         attemptFetch()
@@ -28,19 +29,21 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         checkAction.addTextField() { (textField) in
             textField.placeholder = "\(BASE_URL)"
         }
+        
         let checkNow = UIAlertAction(title: "Check Now", style: .default) { (_) in
             NSLog("Inside Check Now")
             self.updateCoreData()
             self.attemptFetch()
             self.tableView.reloadData()
         }
+        
         let delete = UIAlertAction(title: "Delete", style: .default) { (_) in
             NSLog("Inside Delete Now")
             self.deleteCoreData()
             self.attemptFetch()
             self.tableView.reloadData()
-            
         }
+        
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         checkAction.addAction(checkNow)
         checkAction.addAction(delete)
@@ -62,9 +65,7 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         self.tableView.addSubview(self.refreshControl!)
         attemptFetch()
         tableView.tableFooterView = UIView()
-        
     }
-    
     
     // Download JSON from web and store it into Core Data
     func downloadData(completion: @escaping DownloadComplete) {
@@ -72,10 +73,12 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
             let resultJSON = response.result
             if let result = resultJSON.value as? [Dictionary<String, AnyObject>] {
                 for index in 0...result.count - 1 {
+                    
+                    // creates a Subject entity
                     let coreSubject = Subject(context: context)
                     let subjectObj = result[index]
                     
-                    // Subject portion
+                    // adding data into the attributes of the Subject
                     if let title = subjectObj["title"] as? String {
                         coreSubject.title = title.capitalized
                     }
@@ -92,8 +95,7 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
                         coreSubject.imageFile = "hero icon"
                     }
                     
-                    // Should be the correct way to store data
-                    // Question
+                    // make the relationship of the Subject mutable in order to add data into it
                     let questionData = coreSubject.toQuestion?.mutableCopy() as! NSMutableSet
                     
                     if let questionObj = subjectObj["questions"] as? [Dictionary<String, AnyObject>] {
@@ -103,18 +105,15 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
                             let answer = currQ["answer"] as? String
                             let coreQuestion = Question(context: context)
                             coreQuestion.text = text
-//                            coreQuestion.answer = answer
                             
                             // setting the correct answer for coreQuestion.answer
                             if let arrayQuestion = currQ["answers"] as? [String] {
                                 for questionIndex in 0...arrayQuestion.count {
                                     if (Int(answer!)! - 1) == questionIndex {
                                         coreQuestion.answer = arrayQuestion[questionIndex]
-//                                        NSLog("coreQuestion answer: \(coreQuestion.answer)")                                        
                                     }
                                 }
                             }
-                            
                             
                             // Answers
                             let answerData = coreQuestion.toAnswers?.mutableCopy() as! NSMutableSet
@@ -126,11 +125,11 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
                                     coreQuestion.addToToAnswers(answerData)
                                 }
                             }
-                            
                             questionData.add(coreQuestion)
                             coreSubject.addToToQuestion(questionData)
                         }
                     }
+                    // saving into core data
                     ad.saveContext()
                 }
             }
@@ -142,7 +141,7 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         super.didReceiveMemoryWarning()
     }
     
-    // Core Data code
+    // Attempt to grab the data from Core Data and sets it
     func attemptFetch() {
         let fetchRequest: NSFetchRequest<Subject> = Subject.fetchRequest()
         let titleSort = NSSortDescriptor(key: "title", ascending: true)
@@ -233,14 +232,14 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         }
     }
     
-    
     // MARK: - Table view data source
+    
+    // Update the section, rows, and displays what information is on the prototype cell
     override func numberOfSections(in tableView: UITableView) -> Int {
         if let sections = controller.sections {
             return sections.count
         }
         return 0
-        //        return 1
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -253,7 +252,6 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
             return sectionInfo.numberOfObjects
         }
         return 0
-        //        return subjects.count
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -263,56 +261,17 @@ class SubjectTableVC: UITableViewController, NSFetchedResultsControllerDelegate 
         }
     }
     
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! SubjectCellTableViewCell
         configureCell(cell: cell, indexPath: indexPath as NSIndexPath)
         return cell
     }
     
-    // configures the cell
-    func configureCell(cell: SubjectCellTableViewCell, indexPath: NSIndexPath) {
+    // helper function to configure the cell
+    private func configureCell(cell: SubjectCellTableViewCell, indexPath: NSIndexPath) {
         let sub = controller.object(at: indexPath as IndexPath)
         cell.configureCell(subject: sub)
     }
-    
-
-
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
-    
-    /*
-     // Override to support editing the table view.
-     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-     if editingStyle == .delete {
-     // Delete the row from the data source
-     tableView.deleteRows(at: [indexPath], with: .fade)
-     } else if editingStyle == .insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
-    
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-     
-     }
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
-    
     
     // MARK: - Navigation
     
