@@ -79,7 +79,7 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate, UIPickerViewDat
     
     //func actionButton(_ sender: UIBarButtonItem) {
     func actionButton() {
-        
+
         // check the selected item with correct answer
         let selectedPickerAnswer = answers[answerPickerView.selectedRow(inComponent: 0)].answer
         let questionAnswer = questions[quizState.questionCounter].answer
@@ -151,28 +151,34 @@ class QuestionVC: UIViewController, UIGestureRecognizerDelegate, UIPickerViewDat
 
     // returns an array of questions
     func getQuestion(subject: Subject) -> [Question] {
-        let questionRequest: NSFetchRequest<Question> = Question.fetchRequest()
-        questionRequest.predicate = NSPredicate(format: "toSubject = %@", subject)
-        
-        do {
-            let questions = try context.fetch(questionRequest)
-            return questions
-        } catch {
-            fatalError("Error in getQuestion")
+        if questions.isEmpty {
+            let questionRequest: NSFetchRequest<Question> = Question.fetchRequest()
+            questionRequest.predicate = NSPredicate(format: "toSubject = %@", subject)
+            
+            do {
+                let questions = try context.fetch(questionRequest)
+                return questions
+            } catch {
+                fatalError("Error in getQuestion")
+            }
         }
+        return questions
     }
     
     // returns an array of answers
     func getAnswers(question: Question) -> [Answers] {
-        let answersRequest: NSFetchRequest<Answers> = Answers.fetchRequest()
-        answersRequest.predicate = NSPredicate(format: "toQuestion = %@", question)
-        
-        do {
-            let answers = try context.fetch(answersRequest)
-            return answers
-        } catch {
-            fatalError("Error in getQuestion")
+        if answers.isEmpty {
+            let answersRequest: NSFetchRequest<Answers> = Answers.fetchRequest()
+            answersRequest.predicate = NSPredicate(format: "toQuestion = %@", question)
+            
+            do {
+                let answers = try context.fetch(answersRequest)
+                return answers
+            } catch {
+                fatalError("Error in getQuestion")
+            }
         }
+        return answers
     }
     
     override func didReceiveMemoryWarning() {

@@ -22,38 +22,31 @@ class AnswerVC: UIViewController {
     var quizState: QuizState = QuizState()
     
     @IBAction func backHomeButton(_ sender: UIBarButtonItem) {
-        //navigationController?.popViewController(animated: true)
-        //navigationController?.popViewController(animated: true)
-        dismiss(animated: true, completion: nil)
-        if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
-        }
+        actionHome()
+//        dismiss(animated: true, completion: nil)
+//        if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
+//            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//            appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
+//        }
     }
     @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
-        quizState.questionCounter = quizState.questionCounter + 1
-        
-        print(quizState.questionCounter)
-        print(quizState.maxQuestion)
-        
-        if quizState.questionCounter != quizState.maxQuestion {
-            
-            quizState.isCorrect = false
-            quizState.answerPressed = -1
-            
-            // NSLog("AnswerVC to QuestionVC -counter not equal to max: \(quizState.questionCounter)")
-            
-            performSegue(withIdentifier: "QuestionVC", sender: questionModel)
-            
-        } else {
-            
-            // NSLog("AnswerVC to QuestionVC -counter equal to max: \(quizState.questionCounter)")
-            
-            performSegue(withIdentifier: "FinishVC", sender: quizState)
-        }
+        actionButton()
     }
     
     @IBAction func swipeRight(_ sender: UISwipeGestureRecognizer) {
+        actionHome()
+//        dismiss(animated: true, completion: nil)
+//        if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
+//            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//            appDelegate.window?.rootViewController!.present(home, animated: true, completion: nil)
+//        }
+    }
+    
+    @IBAction func nextButton(_ sender: UIBarButtonItem) {
+        actionButton()
+    }
+    
+    func actionHome() {
         dismiss(animated: true, completion: nil)
         if let home = self.storyboard?.instantiateViewController(withIdentifier: "Initial") as? UINavigationController {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -61,10 +54,8 @@ class AnswerVC: UIViewController {
         }
     }
     
-    @IBAction func nextButton(_ sender: UIBarButtonItem) {
-        
+    func actionButton() {
         quizState.questionCounter = quizState.questionCounter + 1
-        
         
         if quizState.questionCounter != quizState.maxQuestion {
             
@@ -73,7 +64,7 @@ class AnswerVC: UIViewController {
             
             // NSLog("AnswerVC to QuestionVC -counter not equal to max: \(quizState.questionCounter)")
             
-            performSegue(withIdentifier: "QuestionVC", sender: questionModel)
+            performSegue(withIdentifier: "QuestionVC", sender: subjectCoreData)
             
         } else {
             
@@ -81,8 +72,8 @@ class AnswerVC: UIViewController {
             
             performSegue(withIdentifier: "FinishVC", sender: quizState)
         }
-        
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -102,9 +93,6 @@ class AnswerVC: UIViewController {
 //            // NSLog("Question Correct: \(correctAnswer.answers[number])")
 //            resultLabel.text = "You got it wrong! The answer is \(correctAnswer.answers[number])"
         }
-
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -146,15 +134,17 @@ class AnswerVC: UIViewController {
     
     
     // MARK: - Navigation
-    /*
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? QuestionVC {
-            if let subject = sender as? SubjectObj {
+            if let subject = sender as? Subject {
 //                destination.questionModel = subject
+                destination.subjectCoreData = subject
                 destination.quizState = quizState
             }
         }
+        
         if let destination = segue.destination as? FinishVC {
             if let quiz = sender as? QuizState {
                 //destination.questionModel = subject
@@ -162,6 +152,6 @@ class AnswerVC: UIViewController {
             }
         }
     }
-    */
+    
     
 }
